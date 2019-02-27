@@ -8,6 +8,8 @@ import LembretesScreen from '../screens/LembretesScreen';
 import TarefasDiaScreen from '../screens/TarefasDiaScreen';
 import AdministrarScreen from '../screens/AdministrarScreen';
 
+
+
 const TarefasStack = createStackNavigator({
     Tarefas   : TarefasScreen,
     TarefasDia   : TarefasDiaScreen,
