@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var db =  require('./database/connection');
 
 var utentesRouter = require('./routes/utentes');
 var lembretesRouter = require('./routes/lembretes');
@@ -10,6 +11,11 @@ var administracaoRouter = require('./routes/administracao');
 
 
 var app = express();
+
+// Database connection
+db.authenticate()
+  .then(() => {console.log('Connected to Database')})
+  .catch(err => {console.log('Unable to connect to Database' + err)})
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

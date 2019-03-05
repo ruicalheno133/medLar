@@ -5,4 +5,5 @@ router.get('/', function(req, res, next) {
   res.send('Rotas da administração');
 });
 
+
 module.exports = router;
