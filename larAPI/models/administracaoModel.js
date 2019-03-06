@@ -1,5 +1,5 @@
 module.exports = (db, Sequelize) => { 
-    db.define('Administracao', {
+    return db.define('Administracao', {
         idFuncionario : {
             type : Sequelize.INTEGER,
             primaryKey : true
