@@ -1,8 +1,8 @@
 var Sequelize = require('sequelize');
 var db = require('../database/connection');
 
-var utenteModel = db.define('Utente', {
-    idUtente : {
+var funcionarioModel = db.define('Funcionario', {
+    idFuncionario : {
         type : Sequelize.INTEGER,
         primaryKey : true,
         autoIncrement : true
@@ -10,20 +10,11 @@ var utenteModel = db.define('Utente', {
     nome : {
         type : Sequelize.STRING
     },
-    nomeUsado : {
+    email : {
         type : Sequelize.STRING
     },
-    dataNascimento : {
-        type : Sequelize.DATEONLY
-    },
-    contEmergencia : {
-        type : Sequelize.STRING(9)
-    },
-    foto : {
-        type : Sequelize.BLOB
-    },
-    estado : {
-        type : Sequelize.BOOLEAN
+    password : {
+        type : Sequelize.STRING
     }
 }, 
 {
@@ -31,4 +22,4 @@ var utenteModel = db.define('Utente', {
     timestamps: false
 })
 
-module.exports = utenteModel;
+module.exports = funcionarioModel;
