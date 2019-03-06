@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var utenteModel = require('../models/utenteModel');
+var { utenteModel } = require('../models/index');
 
 /* Rota inicial */
 router.get('/', function(req, res, next) {
