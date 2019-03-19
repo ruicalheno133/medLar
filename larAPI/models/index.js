@@ -72,5 +72,6 @@ module.exports = {
     Utente,
     Medicamento,
     Administracao,
-    FichaMedicacao
+    FichaMedicacao,
+    Lembrete
 }
