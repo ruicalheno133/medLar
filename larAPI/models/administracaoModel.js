@@ -13,13 +13,16 @@ module.exports = (db, Sequelize) => {
             primaryKey : true
         },
         estado : {
-            type : Sequelize.BOOLEAN
+            type : Sequelize.BOOLEAN,
+            allowNull: false
         },
         dataAdministracao : {
-            type : Sequelize.DATEONLY
+            type : Sequelize.DATEONLY,
+            allowNull: false
         },
         observacao : {
-            type : Sequelize.STRING
+            type : Sequelize.STRING(45),
+            allowNull: false
         }
     }, 
     {

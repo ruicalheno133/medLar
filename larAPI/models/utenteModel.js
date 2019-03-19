@@ -6,22 +6,28 @@ module.exports = (db, Sequelize) => {
             autoIncrement : true
         },
         nome : {
-            type : Sequelize.STRING
+            type : Sequelize.STRING(45),
+            allowNull: false
         },
         nomeUsado : {
-            type : Sequelize.STRING
+            type : Sequelize.STRING(45),
+            allowNull: true
         },
         dataNascimento : {
-            type : Sequelize.DATEONLY
+            type : Sequelize.DATEONLY,
+            allowNull: false
         },
         contEmergencia : {
-            type : Sequelize.STRING(9)
+            type : Sequelize.STRING(9),
+            allowNull: false
         },
         foto : {
-            type : Sequelize.BLOB
+            type : Sequelize.BLOB,
+            allowNull: true
         },
         estado : {
-            type : Sequelize.BOOLEAN
+            type : Sequelize.BOOLEAN,
+            allowNull: false
         }
     }, 
     {
