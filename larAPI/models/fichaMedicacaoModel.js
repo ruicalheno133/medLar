@@ -2,32 +2,42 @@ module.exports = (db, Sequelize) => {
     return db.define('FichaMedicacao', {
         idUtente : {
             type : Sequelize.INTEGER,
-            primaryKey : true
+            primaryKey : true,
+            allowNull: false
+
         },
         idMedicamento : {
             type : Sequelize.INTEGER,
-            primaryKey : true
+            primaryKey : true,
+            allowNull: false
         },
         periodosDia : {
-            type : Sequelize.TINYINT
+            type : Sequelize.TINYINT,
+            allowNull: false
         },
         quantidade : {
-            type : Sequelize.INTEGER
+            type : Sequelize.INTEGER,
+            allowNull: false
         },
         unidade : {
-            type : Sequelize.STRING
+            type : Sequelize.STRING(45),
+            allowNull: false
         },
         dataInicio : {
-            type : Sequelize.DATEONLY
+            type : Sequelize.DATEONLY,
+            allowNull: false
         },
         dataFim : {
-            type : Sequelize.DATEONLY
+            type : Sequelize.DATEONLY,
+            allowNull: true
         },
         dias : {
-            type : Sequelize.TINYINT
+            type : Sequelize.TINYINT,
+            allowNull: false
         },
         estado : {
-            type : Sequelize.BOOLEAN
+            type : Sequelize.BOOLEAN,
+            allowNull: false
         }
     }, 
     {

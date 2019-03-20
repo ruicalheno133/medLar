@@ -1,29 +1,77 @@
 var Sequelize = require('sequelize')
-var db = require('../database/connection')
+var sequelize = require('../database/connection')
 
-var utente = require('./utenteModel')
-var funcionario = require('./funcionarioModel')
-var medicamento = require('./medicamentoModel')
-var fichaMedicacao = require('./fichaMedicacaoModel')
-var administracao = require('./administracaoModel')
+const FuncionarioModel = require('./funcionarioModel');
+const UtenteModel = require('./utenteModel');
+const MedicamentoModel = require('./medicamentoModel');
+const AdministracaoModel = require('./administracaoModel');
+const FichaMedicacaoModel = require('./fichaMedicacaoModel');
+const LembreteModel = require('./lembreteModel');
 
 // Criação dos Modelos
 
-var utenteModel = utente(db, Sequelize)
-var funcionarioModel = funcionario(db, Sequelize)
-var medicamentoModel = medicamento(db, Sequelize)
-var fichaMedicacaoModel = fichaMedicacao(db, Sequelize)
-var administracaoModel = administracao(db, Sequelize)
+const Funcionario = FuncionarioModel(sequelize,Sequelize);
+const Utente = UtenteModel(sequelize,Sequelize);
+const Medicamento = MedicamentoModel(sequelize,Sequelize);
+const Administracao = AdministracaoModel(sequelize,Sequelize);
+const FichaMedicacao = FichaMedicacaoModel(sequelize,Sequelize);
+const Lembrete = LembreteModel(sequelize,Sequelize);
 
-// Relationships
-utenteModel.hasMany(fichaMedicacaoModel, {as : 'FichaMedicacao', foreignKey: 'idUtente'});
-fichaMedicacaoModel.hasOne(medicamentoModel, {foreignKey:'idMedicamento'});
+Funcionario.hasMany(Administracao, {
+    foreignKey:{
+        fieldName:'idFuncionario',
+        allowNull:false
+    },
+    onDelete: 'CASCADE'
+});
 
+Funcionario.hasMany(Lembrete,{
+    foreignKey:{
+        fieldName:'idFuncionario',
+        allowNull: false
+    },
+    onDelete:'CASCADE'
+});
+
+Utente.hasMany(Administracao, {
+    foreignKey:{
+        fieldName:'idUtente',
+        allowNull:false
+    },
+    onDelete: 'CASCADE'
+});
+Medicamento.hasMany(Administracao, {
+    foreignKey:{
+        fieldName:'idMedicamento',
+        allowNull: false
+    },
+    onDelete: 'CASCADE'
+});
+Utente.hasMany(FichaMedicacao, {
+    foreignKey:{
+        fieldName:'idUtente',
+        allowNull:false
+    },
+    onDelete: 'CASCADE'
+});
+Medicamento.hasMany(FichaMedicacao, {
+    foreignKey:{
+        fieldName:'idMedicamento',
+        allowNull:false
+    },
+    onDelete: 'CASCADE'
+});
+
+sequelize.sync({force:true})
+    .then(() => {
+        console.log("Database & tables created!")
+    })
 
 module.exports = {
-    utenteModel,
-    funcionarioModel,
-    medicamentoModel,
-    fichaMedicacaoModel,
-    administracaoModel
+    Funcionario,
+    Utente,
+    Medicamento,
+    Administracao,
+    FichaMedicacao,
+    Lembrete
 }
