@@ -1,4 +1,4 @@
-const {Lembrete} = require('../../models/index');
+const {Lembrete} = require('../models/index');
 
 /**
  * Inserir lembrete

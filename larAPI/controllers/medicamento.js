@@ -1,5 +1,5 @@
 var sequelize = require('sequelize')
-const {Medicamento} = require('../../models/index');
+const {Medicamento} = require('../models/index');
 
 
 /**
