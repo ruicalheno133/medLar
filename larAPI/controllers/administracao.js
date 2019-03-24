@@ -9,6 +9,14 @@ module.exports.inserir = (administracao) => {
     return Administracao.create(administracao);
 };
 
+module.exports.listar = () => {
+    return sequelize.query(`SELECT * FROM med_bd.Administracao;`,
+    {
+        type: sequelize.QueryTypes.SELECT
+    })
+};
+
+
 /**
  * Lista utentes a medicar no dia atual
  */
