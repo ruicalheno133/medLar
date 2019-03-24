@@ -16,6 +16,10 @@ module.exports = (sequelize, type) => {
         utente:{
             type: type.STRING(45),
             allowNull:true
+        },
+        concluido:{
+            type: type.TINYINT,
+            allowNull: false
         }
     },
     {

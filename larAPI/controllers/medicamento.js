@@ -1,4 +1,4 @@
-var sequelize = require('sequelize')
+var sequelize = require('../database/connection')
 const {Medicamento} = require('../models/index');
 
 
@@ -13,7 +13,9 @@ module.exports.inserir = (medicamento) => {
  * Listar todos os medicamentos
  */
 module.exports.listar = () => {
-    return Medicamento.findAll({
-        attributes:[[sequelize.fn('CONCAT',sequelize.col('nome'),' - ',sequelize.col('forma')),'Medicamento']]
-    });
+    return sequelize.query(`SELECT CONCAT (med.nome, " - ", med.forma) as 'Medicamento'
+                            FROM med_bd.Medicamento AS med;`,
+    {
+        type: sequelize.QueryTypes.SELECT
+    })
 };

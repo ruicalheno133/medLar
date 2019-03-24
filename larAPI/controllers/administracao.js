@@ -1,6 +1,10 @@
 const {Administracao} = require('../models/index');
 var sequelize = require('../database/connection')
 
+
+/**
+ * Insert into med_bd.Administracao VALUES (idFuncionario, idUtente, idMedicamento, estado, dataAdministracao, observacao);
+ */
 module.exports.inserir = (administracao) => {
     return Administracao.create(administracao);
 };
@@ -16,7 +20,12 @@ module.exports.listarUtentesAMedicar = (altura) => {
                             AND now() BETWEEN fm.dataInicio AND fm.dataFim 
                             AND fm.dias & 1 != 0 
                             AND fm.periodosDia & :altura != 0;`,
-            { replacements: { altura: altura }, type: sequelize.QueryTypes.SELECT }
+            { 
+                replacements: { 
+                    altura: altura 
+                }, 
+                type: sequelize.QueryTypes.SELECT 
+            }
   )
 };
 
@@ -37,10 +46,30 @@ module.exports.listarAdministracao = (idUtente, altura) => {
                                 AND now() BETWEEN fm.dataInicio AND fm.dataFim 
                                 AND fm.dias & 1 != 0 
                                 AND fm.periodosDia & :altura != 0;`,
-            { replacements: { altura: altura, idUtente: idUtente }, type: sequelize.QueryTypes.SELECT }
+        { 
+            replacements: { 
+                altura: altura, 
+                idUtente: idUtente 
+            }, 
+            type: sequelize.QueryTypes.SELECT 
+        }
   )
 };
 
 /**
  * TODO: Controladores para alteração do estado da administação 
  */
+
+module.exports.alterarEstado = (idUtente, idMedicamento) => {
+    return sequelize.query(`UPDATE med_bd.Administracao 
+                                    SET estado = 1 - estado 
+                                    WHERE  idUtente = :idUtente AND idMedicamento = :idMedicamento;`,
+        { 
+            replacements: {
+                idMedicamento: idMedicamento, 
+                idUtente: idUtente
+            }, 
+            type: sequelize.QueryTypes.UPDATE
+        }
+    )
+};

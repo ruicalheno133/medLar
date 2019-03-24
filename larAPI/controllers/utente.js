@@ -12,24 +12,25 @@ module.exports.inserir = (utente) => {
  * Listar todos os utentes com estado true
  */
 module.exports.listar = () => {
-    return Utente.findAll({
-        attributes:['nome','dataNascimento','contEmergencia','foto'],
-        where:{
-            estado: true
-        }
-    });
+    return sequelize.query(`SELECT u.* FROM med_bd.Utente AS u
+                            WHERE u.estado = 1`,
+    {
+        type: sequelize.QueryTypes.SELECT
+    })
 };
 
 /**
  * Encontrar utente por id com estado a true
  */
 module.exports.listarPorID = (idUtente) => {
-    return Utente.findOne({
-        attributes:['idUtente','nome','dataNascimento','contEmergencia','foto'],
-        where:{
-            idUtente: idUtente,
-            estado:true
-        }
+    return sequelize.query(`SELECT u.* FROM med_bd.Utente AS u
+                            WHERE u.idUtente = :idUtente
+                            AND u.estado = 1`,
+    {
+        replacements:{
+            idUtente: idUtente
+        },
+        type: sequelize.QueryTypes.SELECT
     })
 };
 
