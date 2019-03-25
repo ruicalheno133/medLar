@@ -18,7 +18,7 @@ module.exports = (sequelize, type) => {
             allowNull:true
         },
         concluido:{
-            type: type.TINYINT,
+            type: type.TINYINT(1),
             allowNull: false
         }
     },
