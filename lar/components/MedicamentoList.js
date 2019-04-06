@@ -1,14 +1,23 @@
 import React from 'react';
 import { ScrollView, StyleSheet, ActivityIndicator, View} from 'react-native';
-import { ListItem } from 'react-native-elements'
+import { ListItem , Button} from 'react-native-elements'
 import axios from 'axios'
 
-class AdministrarList extends React.Component {
+
+/**
+ * 
+ * Componente que apresenta de medicamentos que 
+ * determinado utente deve tomar
+ * 
+ * Para cada medicamento é apresentado o nome, a quantidade, a unidade
+ * e botões que permitem indicar a administração (ou não) do mesmo
+ */
+class MedicamentoList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       isLoading: true,
-      utenteList: []
+      medicamentoList: [{nome: 'Otoflox', quantidade: '2', unidade: 'gotas'}]
     }
     this.getData=this.getData.bind(this);
   }
@@ -16,10 +25,9 @@ class AdministrarList extends React.Component {
   /* Fetch data from API*/
   getData() {
     axios.get('https://jsonplaceholder.typicode.com/users') // TODO: Change data source
-      .then(data => {
+      .then(()=> {
         this.setState({
-          isLoading: false,
-          utenteList: data.data
+          isLoading: false
         })
       })
       .catch(err => {})
@@ -38,14 +46,13 @@ class AdministrarList extends React.Component {
         </View> 
         :
         <ScrollView style={{flex: 1}}>
-                { this.state.utenteList.map((l) => (
+                { this.state.medicamentoList.map((m) => (
                     <ListItem
                     roundAvatar
-                    key={l.id}
-                    title={'Medicar ' + l.name}
-                    subtitle={'id: '  + l.id}
-                    chevron
-                    onPress={() => this.props.navigation.navigate('Administrar')}
+                    key={m.nome}
+                    title={m.nome + '\t' + m.quantidade + ' ' + m.unidade}
+                    rightElement={<View style={{flexDirection: "row"}}><Button title="SI"></Button><Button title="NO"></Button></View>}
+                    onPress={() => this.props.navigation.navigate('Medicamento')}
                     containerStyle={{borderBottomColor: '#d3d3d3', borderBottomWidth: 1}}
                     />
                 ))
@@ -65,4 +72,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default AdministrarList;
+export default MedicamentoList;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform} from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
-import TarefasScreen from '../screens/TarefasScreen';
+import PeriodosDiaScreen from '../screens/PeriodosDiaScreen';
 import UtentesScreen from '../screens/UtentesScreen';
 import LembretesScreen from '../screens/LembretesScreen';
 import TarefasDiaScreen from '../screens/TarefasDiaScreen';
@@ -11,7 +11,7 @@ import AdministrarScreen from '../screens/AdministrarScreen';
 
 
 const TarefasStack = createStackNavigator({
-    Tarefas   : TarefasScreen,
+    Tarefas   : PeriodosDiaScreen,
     TarefasDia   : TarefasDiaScreen,
     Administrar : AdministrarScreen
 });

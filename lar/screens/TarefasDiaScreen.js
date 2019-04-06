@@ -1,9 +1,15 @@
 import React from 'react';
 import { StyleSheet, View} from 'react-native';
 import TitleSection from '../components/TitleSection';
-import AdministrarList from '../components/AdministrarList';
+import TarefasList from '../components/TarefasrList';
 
-
+/**
+ * 
+ * Screen das tarefas a realizar para determinado periodo do dia
+ * 
+ * Composto por:
+ *  Lista de tarefas a realizar
+ */
 export default class TarefasDiaScreen extends React.Component {
   static navigationOptions = {
     title: 'Tarefas',
@@ -16,7 +22,7 @@ export default class TarefasDiaScreen extends React.Component {
           <TitleSection title={this.props.navigation.getParam('altura', '')}/>
         </View>
         <View style={{flex: 6}}>
-          <AdministrarList navigation={this.props.navigation}/>
+          <TarefasList navigation={this.props.navigation}/>
         </View>
       </View>
     );
