@@ -11,6 +11,7 @@ import axios from 'axios'
  * 
  * Para cada medicamento é apresentado o nome, a quantidade, a unidade
  * e botões que permitem indicar a administração (ou não) do mesmo
+ * 
  */
 class MedicamentoList extends React.Component {
   constructor(props) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View} from 'react-native';
 import TitleSection from '../components/TitleSection';
-import TarefasList from '../components/TarefasrList';
+import TarefasList from '../components/TarefasList';
 
 /**
  * 

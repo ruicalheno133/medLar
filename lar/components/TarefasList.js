@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, StyleSheet, ActivityIndicator, View} from 'react-native';
 import { ListItem } from 'react-native-elements'
 import axios from 'axios'
-
+ 
 /**
  * 
  * Componente que apresenta a lista de tarefas
