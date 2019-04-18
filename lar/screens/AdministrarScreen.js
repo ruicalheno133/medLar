@@ -27,25 +27,23 @@ export default class AdministrarScreen extends React.Component {
     return (
       <View style={styles.container}>
         <LinearGradient colors={['#3C6478', '#3990A4']} style={{flex: 3}}>
-          <View style={{flex: 1, flexDirection: 'row'}}>
-          <View style={{flex: 1}}>
+          <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
             <Avatar 
-            imageProps={{resizeMode: 'cover', borderRadius: 10}}
-            size="xlarge"
-            containerStyle={{top: 30, left: 20, flex: 1, overflow: 'hidden', borderColor: '#3990A4', borderRadius: 15, borderWidth: 5}}
+            rounded
+            size='large'
+            imageProps={{resizeMode: 'cover'}}
+            containerStyle={{borderRadius: 100}}
           source={{
             uri:
               'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
           }}
-      />
-          </View>
-          <View style={{marginTop: 30, flex: 1, flexDirection: 'row'}}>
-            <Text style={{color:'white', fontSize: 20, fontWeight: '800'}}>Rui Alvim</Text>
-            <Text style={{color:'white', fontSize: 15, fontWeight: '200'}}>1234</Text>
-          </View>
-          </View>
+            />
+            </View>
+                <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+                    <Text style={{color:'white', fontSize: 20, fontWeight: '800'}}>Rui Calheno</Text>
+                </View>
         </LinearGradient>
-        <View style={{flex: 6, marginTop: 30}}>
+        <View style={{flex: 6, marginTop: 10}}>
           <MedicamentoList />
         </View>
       </View>

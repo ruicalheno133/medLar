@@ -22,7 +22,7 @@ export default class TarefasDiaScreen extends React.Component {
           <TitleSection title={this.props.navigation.getParam('altura', '')}/>
         </View>
         <View style={{flex: 6}}>
-          <TarefasList navigation={this.props.navigation}/>
+          <TarefasList navigation={this.props.navigation} altura={this.props.navigation.getParam('altura', '')}/>
         </View>
       </View>
     );

@@ -2,6 +2,7 @@ import React from 'react';
 import { ScrollView, StyleSheet, ActivityIndicator, View} from 'react-native';
 import { ListItem , Button} from 'react-native-elements'
 import axios from 'axios'
+import { FontAwesome } from '@expo/vector-icons';
 
 
 /**
@@ -52,7 +53,12 @@ class MedicamentoList extends React.Component {
                     roundAvatar
                     key={m.nome}
                     title={m.nome + '\t' + m.quantidade + ' ' + m.unidade}
-                    rightElement={<View style={{flexDirection: "row"}}><Button title="SI"></Button><Button title="NO"></Button></View>}
+                    rightElement={
+                      <View style={{flexDirection: "row"}}>
+                        <Button type='clear' icon={<FontAwesome name="check-circle" size={30} style={{color: '#3990A4'}}/>}></Button>
+                        <Button type='clear' icon={<FontAwesome name="times-circle" size={30} style={{color: 'red'}} />}></Button>
+                      </View>
+                    }
                     onPress={() => this.props.navigation.navigate('Medicamento')}
                     containerStyle={{borderBottomColor: '#d3d3d3', borderBottomWidth: 1}}
                     />

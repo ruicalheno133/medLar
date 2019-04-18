@@ -7,6 +7,7 @@ import UtentesScreen from '../screens/UtentesScreen';
 import LembretesScreen from '../screens/LembretesScreen';
 import TarefasDiaScreen from '../screens/TarefasDiaScreen';
 import AdministrarScreen from '../screens/AdministrarScreen';
+import PerfilUtenteScreen from '../screens/PerfilUtenteScreen'
 
 
 
@@ -23,6 +24,7 @@ TarefasStack.navigationOptions =
 
 const UtentesStack = createStackNavigator({
     Utentes: UtentesScreen,
+    PerfilUtente: PerfilUtenteScreen,
 });
 
 UtentesStack.navigationOptions = 

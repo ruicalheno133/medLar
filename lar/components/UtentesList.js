@@ -1,17 +1,17 @@
 import React from 'react';
 import { ScrollView, StyleSheet, ActivityIndicator, View} from 'react-native';
-import { ListItem } from 'react-native-elements'
+import { ListItem, Avatar } from 'react-native-elements'
 import axios from 'axios'
  
 /**
  * 
- * Componente que apresenta a lista de tarefas
- * a realizar para determinado periodo do dia
+ * Componente que apresenta a lista de utentes
+ * do lar
  * 
  * Cada item é composto pelo nome e id do utente.
  * 
  */
-class TarefasList extends React.Component {
+class UtentesList extends React.Component {
 
   constructor(props) {
     super(props)
@@ -24,9 +24,7 @@ class TarefasList extends React.Component {
 
   /* Fetch data from API*/
   getData() {
-    const alturas = {'Pequeno-Almoço': 1, 'Almoço': 2, 'Lanche': 4, 'Jantar': 8, 'Ceia': 16}
-    var altura = alturas[this.props.altura]
-    axios.get('http://192.168.1.87:3000/administracao/porAltura/' + altura) // TODO: Change data source
+    axios.get('http://192.168.1.87:3000/utentes') // TODO: Change data source
       .then(data => {
         this.setState({
           isLoading: false,
@@ -34,7 +32,6 @@ class TarefasList extends React.Component {
         })
       })
       .catch(err => {})
-
   }
 
   componentDidMount () {
@@ -51,16 +48,18 @@ class TarefasList extends React.Component {
         <ScrollView style={{flex: 1}}>
                 { this.state.utenteList.map((l) => (
                     <ListItem
+                    leftAvatar={<Avatar rounded source={{uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'}} />}
                     key={l.idUtente}
-                    title={'Medicar ' + l.nome}
-                    subtitle={'id: '  + l.idUtente}
+                    title={l.nome}
+                    subtitle={'' + l.idUtente}
                     chevron
-                    onPress={() => this.props.navigation.navigate('Administrar')}
+                    onPress={() => this.props.navigation.navigate('PerfilUtente', {idUtente: l.idUtente})}
                     containerStyle={{borderBottomColor: '#d3d3d3', borderBottomWidth: 1}}
                     />
                 ))
             }
         </ScrollView>
+
     );
   }
 }
@@ -75,4 +74,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default TarefasList;
+export default UtentesList;
