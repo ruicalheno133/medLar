@@ -1,12 +1,14 @@
 import React from 'react';
 import { createAppContainer, createSwitchNavigator, createStackNavigator } from 'react-navigation';
 import LoginScreen from '../screens/LoginScreen';
+import RegistarFuncionarioScreen from '../screens/RegistarFuncionarioScreen';
 
 import MainTabNavigator from './MainTabNavigator';
 
 const authFlow = createStackNavigator(
   {
-    Login : LoginScreen
+    Login : LoginScreen,
+    RegistarFuncionario : RegistarFuncionarioScreen,
   });
 
 export default createAppContainer(createSwitchNavigator({

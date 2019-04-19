@@ -29,7 +29,7 @@ class MedicamentoList extends React.Component {
   getData() {
     const alturas = {'Pequeno-Almoço': 1, 'Almoço': 2, 'Lanche': 4, 'Jantar': 8, 'Ceia': 16}
     var altura = alturas[this.props.navigation.getParam('altura')]
-    axios.get('http://192.168.1.87:3000/administracao/porDoente/' + this.props.navigation.getParam('idUtente') + '/' + altura) // TODO: Change data source
+    axios.get('http://192.168.0.105:3000/administracao/porDoente/' + this.props.navigation.getParam('idUtente') + '/' + altura) // TODO: Change data source
       .then((data)=> {
         this.setState({
           isLoading: false,

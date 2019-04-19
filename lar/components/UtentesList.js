@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, ActivityIndicator, View} from 'react-native';
-import { ListItem, Avatar } from 'react-native-elements'
+import { ListItem, Avatar, Button } from 'react-native-elements'
+import { FontAwesome } from '@expo/vector-icons';
 import axios from 'axios'
  
 /**
@@ -13,55 +14,25 @@ import axios from 'axios'
  */
 class UtentesList extends React.Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      isLoading: true,
-      utenteList: []
-    }
-    this.getData=this.getData.bind(this);
-  }
-
-  /* Fetch data from API*/
-  getData() {
-    axios.get('http://192.168.1.87:3000/utentes') 
-      .then(data => {
-        this.setState({
-          isLoading: false,
-          utenteList: data.data
-        })
-      })
-      .catch(err => {})
-  }
-
-  componentDidMount () {
-    this.getData()
-  }
-
   render() {
+    const list = this.props.utentesList.map((l,i) => (
+      <ListItem
+      leftAvatar={{ size: "small", rounded: true, source: { uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' } }}
+      key={l.idUtente}
+      title={l.nome}
+      subtitle={'' + l.idUtente}
+      chevron
+      onPress={() => this.props.navigation.navigate('PerfilUtente', {idUtente: l.idUtente})}
+      containerStyle={{borderBottomColor: '#d3d3d3', borderBottomWidth: 1}}
+      />
+  ))
     return (
-        this.state.isLoading ? 
-        <View style={{flex: 1, justifyContent: 'center',}}>
-          <ActivityIndicator size='large' color='#3990A4'/>
-        </View> 
-        :
-        <ScrollView style={{flex: 1}}>
-                { this.state.utenteList.map((l) => (
-                    <ListItem
-                    leftAvatar={<Avatar rounded source={{uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'}} />}
-                    key={l.idUtente}
-                    title={l.nome}
-                    subtitle={'' + l.idUtente}
-                    chevron
-                    onPress={() => this.props.navigation.navigate('PerfilUtente', {idUtente: l.idUtente})}
-                    containerStyle={{borderBottomColor: '#d3d3d3', borderBottomWidth: 1}}
-                    />
-                ))
-            }
-        </ScrollView>
-
-    );
-  }
+        <View style={{flex: 1}}>
+            <ScrollView stickyHeaderIndices={[0]}>
+                {list}
+            </ScrollView>
+        </View>
+  )}
 }
 
 const styles = StyleSheet.create({

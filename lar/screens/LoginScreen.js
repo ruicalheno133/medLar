@@ -39,7 +39,7 @@ export default class LoginScreen extends React.Component {
                     buttonStyle={styles.buttonStyle}
                     containerStyle={styles.buttonContainer}
                     />
-            <Button title='Criar conta' type='clear' titleStyle={styles.registerButton}/>
+            <Button title='Criar conta' type='clear' titleStyle={styles.registerButton} onPress={()=>this.props.navigation.navigate('RegistarFuncionario')}/>
         </View>
       </LinearGradient>
     );

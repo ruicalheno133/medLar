@@ -41,7 +41,7 @@ export default class PerfilUtenteScreen extends React.Component {
   }
 
   getUtenteData() {
-    axios.get('http://192.168.1.87:3000/utentes/' + this.props.navigation.getParam('idUtente', null)) // TODO: Change data source
+    axios.get('http://192.168.0.105:3000/utentes/' + this.props.navigation.getParam('idUtente', null)) // TODO: Change data source
     .then(data => {
       this.setState({
         isLoading: false,
@@ -119,7 +119,7 @@ export default class PerfilUtenteScreen extends React.Component {
             />
             {infoFicha}
 
-            <View style={{alignItems:'center', marginTop: 10, position:'absolute', bottom: 10, right:10}}>
+            <View style={{alignItems:'center', marginTop: 10, position:'absolute', bottom: 10, right:10, zIndex: 1}}>
                 <Button
                     title=" Editar"
                     type="outline"
