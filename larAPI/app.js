@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var db =  require('./database/connection');
+var bodyParser = require('body-parser');
 
 
 var administracaoAPIrouter = require('./routes/api/administracao');
@@ -16,6 +17,7 @@ var utenteAPIrouter = require('./routes/api/utente');
 var utentesRouter = require('./routes/utentes');
 var lembretesRouter = require('./routes/lembretes');
 var administracaoRouter = require('./routes/administracao');
+var funcionariosRouter = require('./routes/funcionarios');
 
 
 var app = express();
@@ -34,6 +36,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser());
 
 // Rotas API
 app.use('/api/utentes',utenteAPIrouter);
@@ -47,6 +50,7 @@ app.use('/api/medicamentos',medicamentoAPIrouter);
 app.use('/utentes', utentesRouter);
 app.use('/lembretes', lembretesRouter);
 app.use('/administracao', administracaoRouter);
+app.use('/funcionarios',funcionariosRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
