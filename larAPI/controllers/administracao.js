@@ -25,7 +25,8 @@ module.exports.listarUtentesAMedicar = (altura) => {
                             FROM med_bd.Utente as u
                             INNER JOIN med_bd.FichaMedicacao as fm ON fm.idUtente = u.idUtente 
                             WHERE fm.estado = 1 
-                            AND now() BETWEEN fm.dataInicio AND fm.dataFim 
+                            AND ((fm.dataFim IS NOT NULL AND now() BETWEEN fm.dataInicio AND fm.dataFim) 
+                                OR (fm.dataFim IS NULL AND now() >= fm.dataInicio))
                             AND fm.dias & 1 != 0 
                             AND fm.periodosDia & :altura != 0;`,
             { 
@@ -42,7 +43,7 @@ module.exports.listarUtentesAMedicar = (altura) => {
  * para determinada altura do dia atual
  */
 module.exports.listarAdministracao = (idUtente, altura) => {
-    return sequelize.query(`SELECT CONCAT(m.nome, ' - ', m.forma) as 'Medicamento' , fm.quantidade, fm.unidade, a.estado
+    return sequelize.query(`SELECT m.idMedicamento, CONCAT(m.nome, ' - ', m.forma) as 'Medicamento' , fm.quantidade, fm.unidade, a.estado
                             FROM med_bd.Utente as u
                             INNER JOIN med_bd.FichaMedicacao as fm ON fm.idUtente = u.idUtente 
                             INNER JOIN med_bd.Medicamento as m ON fm.idMedicamento = m.idMedicamento
@@ -51,7 +52,8 @@ module.exports.listarAdministracao = (idUtente, altura) => {
                                 AND date(a.dataAdministracao) = date(now())
                             WHERE u.idUtente = :idUtente
                                 AND fm.estado = 1 
-                                AND now() BETWEEN fm.dataInicio AND fm.dataFim 
+                                AND ((fm.dataFim IS NOT NULL AND now() BETWEEN fm.dataInicio AND fm.dataFim) 
+                                OR (fm.dataFim IS NULL AND now() >= fm.dataInicio))
                                 AND fm.dias & 1 != 0 
                                 AND fm.periodosDia & :altura != 0;`,
         { 
