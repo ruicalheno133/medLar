@@ -1,5 +1,5 @@
 var express = require('express');
-var funcionarioController = require('../../controllers/funcionario')
+var funcionarioController = require('../controllers/funcionario')
 var router = express.Router();
 var bcrypt = require('bcrypt');
 
