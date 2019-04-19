@@ -1,14 +1,19 @@
 module.exports = (db, Sequelize) => { 
     return db.define('FichaMedicacao', {
+        idFichaMedicacao:{
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
         idUtente : {
             type : Sequelize.INTEGER,
-            primaryKey : true,
+            //primaryKey : true,
             allowNull: false
 
         },
         idMedicamento : {
             type : Sequelize.INTEGER,
-            primaryKey : true,
+            //primaryKey : true,
             allowNull: false
         },
         periodosDia : {
