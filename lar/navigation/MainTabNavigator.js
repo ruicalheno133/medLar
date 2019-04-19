@@ -7,14 +7,16 @@ import UtentesScreen from '../screens/UtentesScreen';
 import LembretesScreen from '../screens/LembretesScreen';
 import TarefasDiaScreen from '../screens/TarefasDiaScreen';
 import AdministrarScreen from '../screens/AdministrarScreen';
-import PerfilUtenteScreen from '../screens/PerfilUtenteScreen'
+import PerfilUtenteScreen from '../screens/PerfilUtenteScreen';
+import ObservacoesScreen from '../screens/ObservacoesScreen';
 
 
 
 const TarefasStack = createStackNavigator({
     Tarefas   : PeriodosDiaScreen,
     TarefasDia   : TarefasDiaScreen,
-    Administrar : AdministrarScreen
+    Administrar : AdministrarScreen,
+    Observacoes : ObservacoesScreen, 
 });
 
 TarefasStack.navigationOptions = 

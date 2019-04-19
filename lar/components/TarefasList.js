@@ -55,7 +55,7 @@ class TarefasList extends React.Component {
                     title={'Medicar ' + l.nome}
                     subtitle={'id: '  + l.idUtente}
                     chevron
-                    onPress={() => this.props.navigation.navigate('Administrar')}
+                    onPress={() => this.props.navigation.navigate('Administrar', {idUtente: l.idUtente, altura: this.props.altura})}
                     containerStyle={{borderBottomColor: '#d3d3d3', borderBottomWidth: 1}}
                     />
                 ))

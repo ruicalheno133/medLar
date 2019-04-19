@@ -44,7 +44,7 @@ export default class AdministrarScreen extends React.Component {
                 </View>
         </LinearGradient>
         <View style={{flex: 6, marginTop: 10}}>
-          <MedicamentoList />
+          <MedicamentoList navigation={this.props.navigation}/>
         </View>
       </View>
     );

@@ -65,13 +65,19 @@ export default class PerfilUtenteScreen extends React.Component {
         infoFicha = (
             <View>
             <ListItem
-            key={1}
+              key={1}
+              title={this.state.utenteInfo.nomeUsado}
+              subtitle={'Nome usado'}
+              containerStyle={{borderBottomColor: '#d3d3d3', borderBottomWidth: 1}}
+            />
+            <ListItem
+            key={2}
             title={this.state.utenteInfo.dataNascimento}
             subtitle={'Data de nascimento'}
             containerStyle={{borderBottomColor: '#d3d3d3', borderBottomWidth: 1}}
             />
             <ListItem
-            key={2}
+            key={3}
             subtitle={'Contacto de emergência'}
             title={this.state.utenteInfo.contEmergencia}
             rightIcon={<FontAwesome name="phone" size={25} style={{ color: 'green' }} />}
