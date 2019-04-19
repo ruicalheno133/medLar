@@ -3,8 +3,14 @@ import { View , StyleSheet, Platform} from 'react-native';
 import { Button } from 'react-native-elements';
 import { LinearGradient } from 'expo';
 
-
-class TarefasButtonList extends React.Component {
+/**
+ * 
+ * Componente que apresenta a lista de periodos do 
+ * dia em que se podem realizar tarefas 
+ * 
+ * Pequeno-Almoço, Almoço, Lanche, Jantar e Ceia
+ */
+class PeriodosDiaList extends React.Component {
   render() {
     return (
       <LinearGradient colors={['#3C6478', '#3990A4']} style={{flex: 1}}>
@@ -140,4 +146,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TarefasButtonList;
+export default PeriodosDiaList;

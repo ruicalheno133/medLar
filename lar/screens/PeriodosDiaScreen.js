@@ -1,7 +1,14 @@
 import React from 'react';
-import TarefasButtonList  from '../components/TarefasButtonList';
+import PeriodosDiaList  from '../components/PeriodosDiaList';
 
-
+/**
+ * 
+ * Screen dos vários períodos do dia
+ * 
+ * Composto por:
+ *  Lista de periodos do dia 
+ * 
+ */
 export default class TarefasScreen extends React.Component {
   static navigationOptions = {
     title: 'Tarefas',
@@ -12,7 +19,7 @@ export default class TarefasScreen extends React.Component {
 
   render() {
     return (
-      <TarefasButtonList navigation={this.props.navigation}/>
+      <PeriodosDiaList navigation={this.props.navigation}/>
     );
   }
 }

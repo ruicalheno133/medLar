@@ -1,9 +1,18 @@
 import React from 'react';
 import { ScrollView, StyleSheet, ActivityIndicator, View} from 'react-native';
-import { ListItem } from 'react-native-elements'
+import { ListItem, Avatar } from 'react-native-elements'
 import axios from 'axios'
+ 
+/**
+ * 
+ * Componente que apresenta a lista de utentes
+ * do lar
+ * 
+ * Cada item é composto pelo nome e id do utente.
+ * 
+ */
+class UtentesList extends React.Component {
 
-class AdministrarList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -15,7 +24,7 @@ class AdministrarList extends React.Component {
 
   /* Fetch data from API*/
   getData() {
-    axios.get('https://jsonplaceholder.typicode.com/users') // TODO: Change data source
+    axios.get('http://192.168.1.87:3000/utentes') 
       .then(data => {
         this.setState({
           isLoading: false,
@@ -23,7 +32,6 @@ class AdministrarList extends React.Component {
         })
       })
       .catch(err => {})
-
   }
 
   componentDidMount () {
@@ -40,17 +48,18 @@ class AdministrarList extends React.Component {
         <ScrollView style={{flex: 1}}>
                 { this.state.utenteList.map((l) => (
                     <ListItem
-                    roundAvatar
-                    key={l.id}
-                    title={'Medicar ' + l.name}
-                    subtitle={'id: '  + l.id}
+                    leftAvatar={<Avatar rounded source={{uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'}} />}
+                    key={l.idUtente}
+                    title={l.nome}
+                    subtitle={'' + l.idUtente}
                     chevron
-                    onPress={() => this.props.navigation.navigate('Administrar')}
+                    onPress={() => this.props.navigation.navigate('PerfilUtente', {idUtente: l.idUtente})}
                     containerStyle={{borderBottomColor: '#d3d3d3', borderBottomWidth: 1}}
                     />
                 ))
             }
         </ScrollView>
+
     );
   }
 }
@@ -65,4 +74,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default AdministrarList;
+export default UtentesList;

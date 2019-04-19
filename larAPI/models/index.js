@@ -62,9 +62,14 @@ Medicamento.hasMany(FichaMedicacao, {
     onDelete: 'CASCADE'
 });
 
-sequelize.sync({force:true})
+var force = false
+
+sequelize.sync({force:force})
     .then(() => {
-        console.log("Database & tables created!")
+        if(force)
+            console.log("Database & tables created!")
+        else
+            console.log("Database online!")
     })
 
 module.exports = {

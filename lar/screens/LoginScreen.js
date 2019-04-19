@@ -4,7 +4,15 @@ import { Input, Button} from 'react-native-elements';
 import { LinearGradient } from 'expo';
 
 
-
+/**
+ * 
+ * Screen que permite ao utilizador fazer o login ou
+ * registar-se 
+ * 
+ * Composto por:
+ *  Form de autenticação
+ *  Butão de registo
+ */
 export default class LoginScreen extends React.Component {
   static navigationOptions = {
     header: null

@@ -5,6 +5,14 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var db =  require('./database/connection');
 
+
+var administracaoAPIrouter = require('./routes/api/administracao');
+var fichaMedicacaoAPIrouter = require('./routes/api/fichaMedicacao');
+var funcionarioAPIrouter = require('./routes/api/funcionario');
+var lembreteAPIrouter = require('./routes/api/lembrete');
+var medicamentoAPIrouter = require('./routes/api/medicamento');
+var utenteAPIrouter = require('./routes/api/utente');
+
 var utentesRouter = require('./routes/utentes');
 var lembretesRouter = require('./routes/lembretes');
 var administracaoRouter = require('./routes/administracao');
@@ -27,6 +35,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Rotas API
+app.use('/api/utentes',utenteAPIrouter);
+app.use('/api/administracao',administracaoAPIrouter);
+app.use('/api/fichaMedicacao',fichaMedicacaoAPIrouter);
+app.use('/api/funcionarios',funcionarioAPIrouter);
+app.use('/api/lembrete',lembreteAPIrouter);
+app.use('/api/medicamentos',medicamentoAPIrouter);
+
+// Rotas prinicpais
 app.use('/utentes', utentesRouter);
 app.use('/lembretes', lembretesRouter);
 app.use('/administracao', administracaoRouter);
