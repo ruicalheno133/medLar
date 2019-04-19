@@ -1,14 +1,37 @@
 import React from 'react';
-import { ExpoConfigView } from '@expo/samples';
+import { ScrollView, StyleSheet, Text, View, FlatList} from 'react-native';
+import { ListItem, Avatar } from 'react-native-elements'
+import { LinearGradient } from 'expo';
+import LembreteList from '../components/LembretesList'
 
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
-    title: 'app.json',
+    title: 'Lembretes',
+    titleStyle:{
+      fontFamily: 'Verdana'
+    }
   };
 
   render() {
-    /* Go ahead and delete ExpoConfigView and replace it with your
-     * content, we just wanted to give you a quick view of your config */
-    return <ExpoConfigView />;
+    return(
+      <View style ={styles.container}>
+        <View style={{flex: 6, marginTop: 10}}>
+          <LembreteList />
+        </View>
+      </View>
+    )
   }
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  listContainer: {
+    flex: 1
+  },
+  verticaCenter: {
+    textAlignVertical: 'center'
+  }
+});
