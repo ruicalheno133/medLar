@@ -24,7 +24,7 @@ class UtentesList extends React.Component {
 
   /* Fetch data from API*/
   getData() {
-    axios.get('http://192.168.1.87:3000/utentes') // TODO: Change data source
+    axios.get('http://192.168.1.87:3000/utentes') 
       .then(data => {
         this.setState({
           isLoading: false,

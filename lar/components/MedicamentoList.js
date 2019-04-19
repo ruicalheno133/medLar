@@ -19,21 +19,29 @@ class MedicamentoList extends React.Component {
     super(props)
     this.state = {
       isLoading: true,
-      medicamentoList: [{nome: 'Otoflox', quantidade: '2', unidade: 'gotas'}]
+      medicamentoList: []
     }
     this.getData=this.getData.bind(this);
+    this.handleNoPress=this.handleNoPress.bind(this);
   }
 
-  /* Fetch data from API*/
+  /* Fetch data from API */
   getData() {
-    axios.get('https://jsonplaceholder.typicode.com/users') // TODO: Change data source
-      .then(()=> {
+    const alturas = {'Pequeno-Almoço': 1, 'Almoço': 2, 'Lanche': 4, 'Jantar': 8, 'Ceia': 16}
+    var altura = alturas[this.props.navigation.getParam('altura')]
+    axios.get('http://192.168.1.87:3000/administracao/porDoente/' + this.props.navigation.getParam('idUtente') + '/' + altura) // TODO: Change data source
+      .then((data)=> {
         this.setState({
-          isLoading: false
+          isLoading: false,
+          medicamentoList: data.data
         })
       })
       .catch(err => {})
 
+  }
+
+  handleNoPress() {
+    this.props.navigation.navigate('Observacoes');
   }
 
   componentDidMount () {
@@ -51,12 +59,13 @@ class MedicamentoList extends React.Component {
                 { this.state.medicamentoList.map((m) => (
                     <ListItem
                     roundAvatar
-                    key={m.nome}
-                    title={m.nome + '\t' + m.quantidade + ' ' + m.unidade}
+                    key={m.idMedicamento}
+                    title={m.quantidade + ' ' + m.unidade}
+                    subtitle={m.Medicamento}
                     rightElement={
                       <View style={{flexDirection: "row"}}>
                         <Button type='clear' icon={<FontAwesome name="check-circle" size={30} style={{color: '#3990A4'}}/>}></Button>
-                        <Button type='clear' icon={<FontAwesome name="times-circle" size={30} style={{color: 'red'}} />}></Button>
+                        <Button type='clear' onPress={this.handleNoPress} icon={<FontAwesome name="times-circle" size={30} style={{color: 'red'}} />}></Button>
                       </View>
                     }
                     onPress={() => this.props.navigation.navigate('Medicamento')}

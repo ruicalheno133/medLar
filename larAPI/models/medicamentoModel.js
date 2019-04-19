@@ -6,11 +6,11 @@ module.exports = (db, Sequelize) => {
             autoIncrement : true
         },
         nome : {
-            type : Sequelize.STRING(45),
+            type : Sequelize.STRING(100),
             allowNull: false
         },
         forma : {
-            type : Sequelize.STRING(45),
+            type : Sequelize.STRING(100),
             allowNull: false
         }
     }, 

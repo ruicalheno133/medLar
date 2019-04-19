@@ -12,6 +12,7 @@ export default class SettingsScreen extends React.Component {
     }
   };
 
+
   render() {
     return(
       <View style ={styles.container}>
