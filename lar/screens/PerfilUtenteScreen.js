@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo';
 import axios from 'axios';
 import {Linking} from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
+var conf = require('../myConfig.json')
 
 
 /**
@@ -41,7 +42,7 @@ export default class PerfilUtenteScreen extends React.Component {
   }
 
   getUtenteData() {
-    axios.get('http://192.168.0.105:3000/utentes/' + this.props.navigation.getParam('idUtente', null)) // TODO: Change data source
+    axios.get(`http://${conf.host}:${conf.port}/utentes/${this.props.navigation.getParam('idUtente', null)}`) // TODO: Change data source
     .then(data => {
       this.setState({
         isLoading: false,

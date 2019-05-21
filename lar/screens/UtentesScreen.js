@@ -4,6 +4,7 @@ import { ListItem, Avatar, Button } from 'react-native-elements'
 import { FontAwesome } from '@expo/vector-icons';
 import axios from 'axios'
 import UtentesList from '../components/UtentesList'
+var conf = require('../myConfig.json')
 
 export default class UtentesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -16,7 +17,7 @@ export default class UtentesScreen extends React.Component {
       buttonStyle={{marginRight: 10}}
       titleStyle={{color:'#3990A4'}}
       onPress={() => {navigation.navigate('RegistarUtente', {getData: () => navigation.getParam('getData')()})}}
-  />)
+    />)
   }
   };
 
@@ -32,7 +33,7 @@ export default class UtentesScreen extends React.Component {
 
   /* Fetch data from API*/
   getData() {
-    axios.get('http://192.168.0.105:3000/utentes') 
+    axios.get(`http://${conf.host}:${conf.port}/utentes`) 
       .then(data => {
         this.setState({
           isLoading: false,
@@ -42,7 +43,6 @@ export default class UtentesScreen extends React.Component {
       .catch(err => {})
   }
 
-  
 
   componentDidMount () {
     this.props.navigation.setParams({ getData: this.getData });

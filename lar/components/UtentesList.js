@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, ActivityIndicator, View} from 'react-native';
 import { ListItem, Avatar, Button } from 'react-native-elements'
 import { FontAwesome } from '@expo/vector-icons';
 import axios from 'axios'
+var conf = require('../myConfig.json')
  
 /**
  * 

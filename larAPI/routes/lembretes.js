@@ -18,4 +18,18 @@ router.get('/listarUm/:id', function(req, res, next) {
   res.send('Lista lembrete especifico');
 });
 
+/* GET - Lista lembrete especifico */
+router.delete('/concluir/:id', function(req, res, next) {
+  lembreteController.concluirLembrete(req.params.id)
+    .then(data => {res.end()})
+    .catch(err => {console.log(err)})
+});
+
+/* GET - Lista lembrete especifico */
+router.post('/', function(req, res, next) {
+  lembreteController.inserir(req.body)
+    .then(data => {res.end()})
+    .catch(err => {console.log(err)})
+});
+
 module.exports = router;

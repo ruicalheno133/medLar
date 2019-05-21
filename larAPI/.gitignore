@@ -18,3 +18,7 @@ package-lock.json
 *.log
 *.gz
 database/connection.js
+
+# connection 
+
+database/connection.js

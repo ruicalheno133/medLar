@@ -10,7 +10,7 @@ import AdministrarScreen from '../screens/AdministrarScreen';
 import PerfilUtenteScreen from '../screens/PerfilUtenteScreen';
 import ObservacoesScreen from '../screens/ObservacoesScreen';
 import RegistarUtenteScreen from '../screens/RegistarUtenteScreen';
-
+import CriarLembreteScreen from '../screens/CriarLembreteScreen';
 
 const TarefasStack = createStackNavigator({
     Tarefas   : PeriodosDiaScreen,
@@ -37,6 +37,7 @@ UtentesStack.navigationOptions =
 
 const LembretesStack = createStackNavigator({
     Lembretes : LembretesScreen,
+    CriarLembrete : CriarLembreteScreen
 });
 
 LembretesStack.navigationOptions = 

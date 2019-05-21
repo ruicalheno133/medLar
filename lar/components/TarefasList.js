@@ -2,6 +2,7 @@ import React from 'react';
 import { ScrollView, StyleSheet, ActivityIndicator, View} from 'react-native';
 import { ListItem } from 'react-native-elements'
 import axios from 'axios'
+var conf = require('../myConfig.json')
  
 /**
  * 
@@ -26,7 +27,7 @@ class TarefasList extends React.Component {
   getData() {
     const alturas = {'Pequeno-Almoço': 1, 'Almoço': 2, 'Lanche': 4, 'Jantar': 8, 'Ceia': 16}
     var altura = alturas[this.props.altura]
-    axios.get('http://192.168.0.105:3000/administracao/porAltura/' + altura) // TODO: Change data source
+    axios.get(`http://${conf.host}:${conf.port}/administracao/porAltura/${altura}`) // TODO: Change data source
       .then(data => {
         this.setState({
           isLoading: false,

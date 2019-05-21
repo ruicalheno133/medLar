@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, ActivityIndicator, View} from 'react-native';
 import { ListItem , Button} from 'react-native-elements'
 import axios from 'axios'
 import { FontAwesome } from '@expo/vector-icons';
+var conf = require('../myConfig.json')
 
 
 /**
@@ -29,7 +30,7 @@ class MedicamentoList extends React.Component {
   getData() {
     const alturas = {'Pequeno-Almoço': 1, 'Almoço': 2, 'Lanche': 4, 'Jantar': 8, 'Ceia': 16}
     var altura = alturas[this.props.navigation.getParam('altura')]
-    axios.get('http://192.168.0.105:3000/administracao/porDoente/' + this.props.navigation.getParam('idUtente') + '/' + altura) // TODO: Change data source
+    axios.get(`http://${conf.host}:${conf.port}/administracao/porDoente/${this.props.navigation.getParam('idUtente')}/${altura}`) // TODO: Change data source
       .then((data)=> {
         this.setState({
           isLoading: false,
