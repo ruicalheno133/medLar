@@ -1,5 +1,6 @@
 import React from 'react';
 import PeriodosDiaList  from '../components/PeriodosDiaList';
+import { Button } from 'react-native-elements';
 
 /**
  * 
@@ -10,11 +11,17 @@ import PeriodosDiaList  from '../components/PeriodosDiaList';
  * 
  */
 export default class TarefasScreen extends React.Component {
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => {
+    return {
     title: 'Tarefas',
-    headerStyle: {
-      backgroundColor: '#F5F5F5',
-    }
+    headerRight: (<Button
+      title="Logout"
+      type="clear"
+      buttonStyle={{marginRight: 10}}
+      titleStyle={{color:'#3990A4'}}
+      onPress={() => {navigation.navigate('Login')}}
+  />)
+  }
   };
 
   render() {

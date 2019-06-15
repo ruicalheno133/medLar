@@ -2,6 +2,9 @@ import React from 'react';
 import { StyleSheet, View, Text} from 'react-native';
 import { Input, Button} from 'react-native-elements';
 import { LinearGradient } from 'expo';
+import axios from 'axios';
+var conf = require('../myConfig.json')
+var auth = require('../auth')
 
 
 /**
@@ -18,6 +21,38 @@ export default class LoginScreen extends React.Component {
     header: null
   };
 
+  constructor(props){
+    super(props);
+    this.state = {
+        email: "",
+        password: ""
+    };
+    this.handleLogin=this.handleLogin.bind(this);
+    this.handleRegister=this.handleRegister.bind(this);
+}
+
+handleRegister(){
+  this.props.navigation.navigate('RegistarFuncionario')
+}
+
+  handleLogin() {
+    axios.post(`http://${conf.host}:${conf.port}/auth/login`, 
+    {
+      email: this.state.email,
+      password: this.state.password
+    }).then(response => {
+
+      if (response.data.token) {
+        auth.storeToken(response.data.token)
+        this.props.navigation.navigate('Tarefas')
+      }
+      
+    }).catch(err => {
+
+    })
+
+  }
+
   render() {
     return (
     <LinearGradient colors={['#3C6478', '#3990A4']} style={{flex: 1}}>
@@ -26,20 +61,26 @@ export default class LoginScreen extends React.Component {
         </View>
         <View style={styles.bottomContainer}>
             <Input
-                placeholder='Identificação'
+                name="email"
+                placeholder='Email'
                 containerStyle={styles.inputContainerStyle}
                 inputStyle={styles.inputStyle}
+                onChangeText={(email) => this.setState({email: email})}
             />
             <Input
+                secureTextEntry={true}
+                name="password"
                 placeholder='Palavra-Passe'
                 containerStyle={styles.inputContainerStyle}
                 inputStyle={styles.inputStyle}
+                onChangeText={(password) => this.setState({password: password})}
             />
-            <Button onPress={() => {this.props.navigation.navigate('Main')}} title='Entrar' 
+            <Button onPress={this.handleLogin} title='Entrar' 
                     buttonStyle={styles.buttonStyle}
                     containerStyle={styles.buttonContainer}
+
                     />
-            <Button title='Criar conta' type='clear' titleStyle={styles.registerButton} onPress={()=>this.props.navigation.navigate('RegistarFuncionario')}/>
+            <Button title='Criar conta' type='clear' titleStyle={styles.registerButton} onPress={this.handleRegister}/>
         </View>
       </LinearGradient>
     );

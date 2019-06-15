@@ -3,8 +3,17 @@ import { ScrollView, StyleSheet, ActivityIndicator, View} from 'react-native';
 import { ListItem , Button} from 'react-native-elements'
 import axios from 'axios'
 import { FontAwesome } from '@expo/vector-icons';
+var jwtDecode = require('jwt-decode');
 var conf = require('../myConfig.json')
+var auth = require('../auth')
 
+const ALTURAS = {
+  'Pequeno-Almoço': 1, 
+  'Almoço': 2, 
+  'Lanche': 4, 
+  'Jantar': 8, 
+  'Ceia': 16
+}
 
 /**
  * 
@@ -24,13 +33,18 @@ class MedicamentoList extends React.Component {
     }
     this.getData=this.getData.bind(this);
     this.handleNoPress=this.handleNoPress.bind(this);
+    this.handleYesPress=this.handleYesPress.bind(this);
   }
 
+
+
   /* Fetch data from API */
-  getData() {
-    const alturas = {'Pequeno-Almoço': 1, 'Almoço': 2, 'Lanche': 4, 'Jantar': 8, 'Ceia': 16}
-    var altura = alturas[this.props.navigation.getParam('altura')]
-    axios.get(`http://${conf.host}:${conf.port}/administracao/porDoente/${this.props.navigation.getParam('idUtente')}/${altura}`) // TODO: Change data source
+ async getData() {
+    var token = await auth.getJWT() // Get token
+    var altura = ALTURAS[this.props.navigation.getParam('altura')]
+    
+    axios.get(`http://${conf.host}:${conf.port}/administracao/porDoente/${this.props.navigation.getParam('idUtente')}/${altura}`,
+              { headers: { Authorization: 'Bearer ' + token }})
       .then((data)=> {
         this.setState({
           isLoading: false,
@@ -41,15 +55,71 @@ class MedicamentoList extends React.Component {
 
   }
 
-  handleNoPress() {
-    this.props.navigation.navigate('Observacoes');
+  handleNoPress(m) {
+    console.log(m)
+    this.props.navigation.navigate('Observacoes', {medicamento: m, 
+                                                   altura: this.props.navigation.getParam('altura'),
+                                                   idUtente: this.props.navigation.getParam('idUtente'),
+                                                    getData: this.getData});
+  }
+
+  async handleYesPress(idAdministracao, idMedicamento) {
+    var decoded = undefined
+    try {
+      var token = await auth.getJWT() // Get token
+      var decoded = await jwtDecode(token);
+    }
+    catch (e) {console.log(e)}
+    if (idAdministracao !== null) {
+      console.log('update')
+      axios.put(`http://${conf.host}:${conf.port}/administracao/atualizarAdministracao/${idAdministracao}`, {estado: 1},
+      { headers: { Authorization: 'Bearer ' + token }})
+          .then(response => {
+            this.getData()
+        })
+    } else {
+      console.log('create')
+      var obj = {
+        'idUtente': this.props.navigation.getParam('idUtente'),
+        'idMedicamento': idMedicamento,
+        'idFuncionario': decoded.user.idFuncionario, 
+        'altura': ALTURAS[this.props.navigation.getParam('altura')],
+        'estado': 1,
+        'observacao': null
+      }
+      axios.post(`http://${conf.host}:${conf.port}/administracao/registarAdministracao`, obj,
+                  { headers: { Authorization: 'Bearer ' + token }})
+           .then(response => {this.getData()})
+           .catch(err => {console.log(err)})
+    }
+
   }
 
   componentDidMount () {
     this.getData()
   }
 
+  renderIcon(estado, button) {
+    if (estado === null ) {
+      if (button === 0)
+        return <FontAwesome name="times-circle" size={30} style={{color: 'red'}} /> 
+      else 
+        return <FontAwesome name="check-circle" size={30} style={{color: '#3990A4'}}/>
+    } else if (estado === 1) {
+      if (button === 0) 
+        return <FontAwesome name="times-circle" size={30} style={{color: 'lightgrey'}} /> 
+      else 
+        return <FontAwesome name="check-circle" size={30} style={{color: '#3990A4'}}/>
+    } else if(estado === 0) {
+      if (button === 0) 
+        return <FontAwesome name="times-circle" size={30} style={{color: 'red'}} /> 
+      else 
+        return <FontAwesome name="check-circle" size={30} style={{color: 'lightgrey'}}/>
+    }
+  }
+
   render() {
+
     return (
         this.state.isLoading ? 
         <View style={{flex: 1, justifyContent: 'center',}}>
@@ -65,8 +135,10 @@ class MedicamentoList extends React.Component {
                     subtitle={m.Medicamento}
                     rightElement={
                       <View style={{flexDirection: "row"}}>
-                        <Button type='clear' icon={<FontAwesome name="check-circle" size={30} style={{color: '#3990A4'}}/>}></Button>
-                        <Button type='clear' onPress={this.handleNoPress} icon={<FontAwesome name="times-circle" size={30} style={{color: 'red'}} />}></Button>
+                        <Button type='clear' onPress={() => this.handleYesPress(m.idAdministracao, m.idMedicamento)} 
+                                icon={this.renderIcon(m.estado, 1)}></Button>
+                        <Button type='clear' onPress={() => this.handleNoPress(m)} 
+                                icon={this.renderIcon(m.estado, 0)}></Button>  
                       </View>
                     }
                     onPress={() => this.props.navigation.navigate('Medicamento')}

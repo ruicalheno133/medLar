@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, Text, Alert} from 'react-native';
 import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
 var t = require('tcomb-form-native');
 var _ = require('lodash');
 var axios = require('axios')
 import moment from "moment";
+var auth = require('../auth')
+var conf = require('../myConfig.json')
 
 var Form = t.form.Form;
 
@@ -37,7 +38,12 @@ stylesheet.textboxView.normal.borderBottomColor = 'grey';
 stylesheet.controlLabel.normal.color = 'grey';
 
 
-  var options = {fields: {
+  var options = {
+    i18n: {
+      optional: '',
+      required: '*'
+    },
+    fields: {
     dataNascimento: {
         stylesheet: stylesheet,
         label: 'Data de Nascimento',
@@ -90,11 +96,14 @@ export default class RegistarUtenteScreen extends React.Component {
     );
 }
 
-  onPress () {
+  async onPress () {
+    var token = await auth.getJWT() // Get token
     var value = this.refs.form.getValue();
+
     if (value != null) {
         value.dataNascimento = value.dataNascimento.toString()
-        axios.post('http://192.168.0.105:3000/utentes', value) 
+        axios.post(`http://${conf.host}:${conf.port}/utentes`, value,
+        { headers: { Authorization: 'Bearer ' + token }})
         .then(res => {this.handleRegister(); this.props.navigation.state.params.getData(); this.props.navigation.navigate('Utentes')})
         .catch(err => {})
     }

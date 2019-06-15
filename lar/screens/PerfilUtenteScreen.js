@@ -1,11 +1,13 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View, FlatList} from 'react-native';
-import { ListItem, Avatar, ButtonGroup, Button, Overlay } from 'react-native-elements'
+import { StyleSheet, Text, View} from 'react-native';
+import { ListItem, Avatar, ButtonGroup, Button} from 'react-native-elements'
 import { LinearGradient } from 'expo';
 import axios from 'axios';
 import {Linking} from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
+import FichaMedica from '../components/FichaMedica'
 var conf = require('../myConfig.json')
+var auth = require('../auth')
 
 
 /**
@@ -41,8 +43,10 @@ export default class PerfilUtenteScreen extends React.Component {
     this.setState({selectedIndex})
   }
 
-  getUtenteData() {
-    axios.get(`http://${conf.host}:${conf.port}/utentes/${this.props.navigation.getParam('idUtente', null)}`) // TODO: Change data source
+  async getUtenteData() {
+    var token = await auth.getJWT() // Get token
+    axios.get(`http://${conf.host}:${conf.port}/utentes/${this.props.navigation.getParam('idUtente', null)}`,
+    { headers: { Authorization: 'Bearer ' + token }}) // TODO: Change data source
     .then(data => {
       this.setState({
         isLoading: false,
@@ -87,12 +91,14 @@ export default class PerfilUtenteScreen extends React.Component {
             /> 
             </View>)
     } else {
-        infoFicha = (<View></View>)
+        infoFicha = (
+          <FichaMedica navigation={this.props.navigation} utenteInfo={this.state.utenteInfo}/>
+        )
     }
     return (
         
       <View style={styles.container}>
-        <LinearGradient colors={['#3C6478', '#3990A4']} style={{flex: 3}}>
+        <LinearGradient colors={['#3C6478', '#3990A4']} style={{flex: 2}}>
           <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
             <Avatar 
             rounded
@@ -122,7 +128,8 @@ export default class PerfilUtenteScreen extends React.Component {
 
             <View style={{alignItems:'center', marginTop: 10, position:'absolute', bottom: 10, right:10, zIndex: 1}}>
                 <Button
-                    title=" Editar"
+                    title="Novo medicamento"
+                    onPress={()=>this.props.navigation.navigate('NovoMedicamento')}
                     type="outline"
                     icon={<FontAwesome name="edit" size={20} style={{color: '#3990A4'}}/>}
                     buttonStyle={{borderRadius: 70, borderColor: '#3990A4'}}

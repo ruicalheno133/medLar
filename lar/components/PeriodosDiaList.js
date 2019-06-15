@@ -2,7 +2,6 @@ import React from 'react';
 import { View , StyleSheet, Platform} from 'react-native';
 import { Button } from 'react-native-elements';
 import { LinearGradient } from 'expo';
-
 /**
  * 
  * Componente que apresenta a lista de periodos do 
@@ -28,7 +27,7 @@ class PeriodosDiaList extends React.Component {
             buttonStyle={styles.buttonAltura}
           />   
           <Button
-            onPress={() => this.props.navigation.navigate('TarefasDia', {altura: 'Lanche'})}
+            onPress={() => {this.props.navigation.navigate('TarefasDia', {altura: 'Lanche'})}}
             title='Lanche'
             containerStyle={styles.container}
             buttonStyle={styles.buttonAltura}

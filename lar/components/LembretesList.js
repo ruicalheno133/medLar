@@ -1,11 +1,12 @@
 import React from 'react';
-import { ScrollView, StyleSheet, View, Text} from 'react-native';
-import { ListItem, Avatar, Button} from 'react-native-elements';
+import { ScrollView, StyleSheet, View, Text, Alert} from 'react-native';
+import { ListItem, Button} from 'react-native-elements';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
 import { FontAwesome } from '@expo/vector-icons';
 var moment = require('moment')
 var conf = require('../myConfig.json')
+var auth = require('../auth')
 
 /**
  * Componente que lista os lembretes de um funcionário 
@@ -23,15 +24,38 @@ class LembreteList extends React.Component {
         super(props)
         this.state = {lembretesList: props.lembretesList}
         this.handleDelete = this.handleDelete.bind(this)
+        this.deleteConfirmed = this.deleteConfirmed.bind(this)
     }
 
-    handleDelete(id) {
-        axios.delete(`http://${conf.host}:${conf.port}/lembretes/concluir/${id}`)
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.lembretesList !== this.state.lembretesList){
+            this.setState({lembretesList: nextProps.lembretesList });
+          }
+    }
+
+    async deleteConfirmed(id) {
+        var token = await auth.getJWT() // Get token
+        axios.delete(`http://${conf.host}:${conf.port}/lembretes/concluir/${id}`,
+                    { headers: { Authorization: 'Bearer ' + token }})
              .then( res => {
                  var newList = this.state.lembretesList.filter(l => l.idLembrete != id)
                  this.setState({lembretesList: newList})
                 })
              .catch( err => res.json(err))
+    }
+
+    handleDelete(id){
+            // Works on both iOS and Android
+            Alert.alert(
+            'Aviso',
+            'Tem a certeza que pretende eliminar este lembrete?',
+            [
+                {text: 'Voltar', onPress: () => {}},
+                {text: 'Sim', onPress: () => this.deleteConfirmed(id)}
+                
+            ],
+            {cancelable: true},
+        );
     }
 
     render(){
@@ -44,7 +68,7 @@ class LembreteList extends React.Component {
                             <ListItem
                                 key={l.idLembrete}
                                 title={<Text>Utente: {l.utente}</Text>}
-                                subtitle={<View><Text style={{opacity: 0.7}}>{l.texto}</Text><Text style={{opacity: 0.7}}>{moment(l.timestamp, "YYY-MM-DDTHH:mm:ssZ").format('DD/MM/YY - HH:mm')}</Text></View>}
+                                subtitle={<View><Text style={{opacity: 0.7}}>{l.texto}</Text><Text style={{opacity: 0.7}}>{moment(l.timestamp, "YYYY-MM-DD H:mm:ss").format('DD/MM/YY - HH:mm')}</Text></View>}
                                 rightTitle={''}
                                 leftElement={
                                     <FontAwesome5 name ={'bell'} size={30} style={{color:'black'}}></FontAwesome5>

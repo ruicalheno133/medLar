@@ -1,22 +1,22 @@
 import React from 'react';
-import { View, StyleSheet, Text, Alert} from 'react-native';
+import { View, StyleSheet, Alert} from 'react-native';
 import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
 var t = require('tcomb-form-native');
 var axios = require('axios')
 var _ = require('lodash');
-import { LinearGradient } from 'expo';
+var auth = require('../auth')
+var myConf = require('../myConfig.json')
 
 var Form = t.form.Form;
 
   const stylesheet = _.cloneDeep(t.form.Form.stylesheet);
 
   // overriding the text color
+  // overriding the text color
   stylesheet.textbox.normal.borderWidth = 0;
 stylesheet.textbox.error.borderWidth = 0;
 stylesheet.textbox.normal.marginBottom = 0;
 stylesheet.textbox.error.marginBottom = 0;
-stylesheet.textbox.normal.color = 'white';
 
 stylesheet.textboxView.normal.borderWidth = 0;
 stylesheet.textboxView.error.borderWidth = 0;
@@ -26,17 +26,28 @@ stylesheet.textboxView.normal.borderBottomWidth = 1;
 stylesheet.textboxView.error.borderBottomWidth = 1;
 stylesheet.textboxView.normal.marginBottom = 5;
 stylesheet.textboxView.error.marginBottom = 5;
-stylesheet.textboxView.normal.borderBottomColor = 'white';
-stylesheet.controlLabel.normal.color = 'white';
+stylesheet.textboxView.normal.borderBottomColor = 'grey';
+stylesheet.controlLabel.normal.color = 'grey';
+
+const Email = t.refinement(t.String, email => {
+  const reg = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/; //or any other regexp
+  return reg.test(email);
+});
 
 var Funcionario = t.struct({
     nome: t.String,              // a required string
-    email: t.String,  // an optional string
+    email: Email,  // an optional string
     password: t.String,               // a required number
+    samePassword: t.String
   });
 
 
-  var options = {fields: {
+  var options = {
+    i18n: {
+      optional: '',
+      required: '*'
+    },
+    fields: {
     nome: {
         stylesheet: stylesheet,
         label: 'Nome',
@@ -53,7 +64,14 @@ var Funcionario = t.struct({
         password: true,
         secureTextEntry: true,
         error: 'Password inválida.'
-    }
+    },
+    samePassword: {
+      stylesheet: stylesheet,
+      label: 'Repita a password',
+      password: true,
+      secureTextEntry: true,
+      error: 'Passwords não coincidem.'
+  }
   }};
 
 export default class RegistarFuncionarioScreen extends React.Component {
@@ -83,10 +101,13 @@ Alert.alert(
   );
   }
 
-  onPress () {
+  async onPress () {
     var value = this.refs.form.getValue();
     if (value != null) {
-        axios.post('http://192.168.0.105:3000/funcionarios', value) 
+      if (value.password != value.samePassword) {
+        this.refs.form.refs.input.refs.samePassword.setState({hasError: true})
+      } else 
+        axios.post(`http://${myConf.host}:${myConf.port}/auth/registo`, value)
         .then(res => {this.handleRegister(); this.props.navigation.navigate('Login')})
         .catch(err => {})
     }
@@ -95,7 +116,7 @@ Alert.alert(
 
   render() {
     return (
-        <LinearGradient colors={['#3C6478', '#3990A4']} style={styles.container}>
+      <View style={styles.container}>
         <Form
             ref="form"
             type={Funcionario}
@@ -104,10 +125,10 @@ Alert.alert(
         <Button onPress={this.onPress} title='Registar' 
                     buttonStyle={styles.buttonStyle}
                     containerStyle={styles.buttonContainer}
-                    titleStyle={{color: 'white'}}
+                    titleStyle={{color: '#3990A4'}}
                     type="outline"
         />
-      </LinearGradient>
+        </View>
     );
   }
 }
@@ -118,7 +139,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   buttonStyle: {
-    borderColor: 'white',
+    borderColor: '#3990A4',
     borderWidth: 1,
     width: '40%',
     backgroundColor: 'transparent'

@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, StyleSheet, Text, Alert} from 'react-native';
 import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
 var t = require('tcomb-form-native');
 var _ = require('lodash');
 var axios = require('axios')
-import moment from "moment";
+const moment = require('moment-timezone')
+var jwtDecode = require('jwt-decode');
 var conf = require('../myConfig.json')
+var auth = require('../auth')
 
 var Form = t.form.Form;
 
@@ -16,7 +17,7 @@ var Lembrete = t.struct({
     data: t.Date,               // a required number
   });
 
-  const myFormatFunction = format => date => moment(date).format(format)
+  const myFormatFunction = format => date => moment(date).tz("Europe/Lisbon").format(format)
   const stylesheet = _.cloneDeep(t.form.Form.stylesheet);
 
   // overriding the text color
@@ -37,14 +38,21 @@ stylesheet.textboxView.normal.borderBottomColor = 'grey';
 stylesheet.controlLabel.normal.color = 'grey';
 
 
-  var options = {fields: {
+  var options = {
+    i18n: {
+      optional: '',
+      required: '*'
+    },
+    fields: {
     data: {
         stylesheet: stylesheet,
         label: 'Data',
-      mode: 'date',
+      mode: 'datetime',
       error: 'Data inválida.',
       config: {
-        format: myFormatFunction("DD/MM/YYYY - HH:mm")
+        format: myFormatFunction("DD/MM/YYYY - HH:mm"),
+        dateFormat: myFormatFunction("DD/MM/YYYY"),
+        timeFormat: myFormatFunction("HH:mm")
       }
     },
     utente: {
@@ -61,15 +69,11 @@ stylesheet.controlLabel.normal.color = 'grey';
 
 export default class CriarLembreteScreen extends React.Component {
   static navigationOptions = {
-    title: 'Registar Utente',
+    title: 'Criar Lembrete',
   };
 
   constructor(props) {
     super(props)
-    this.state = {
-      utente: {}
-    }
-
     this.onPress=this.onPress.bind(this);
     this.handleRegister=this.handleRegister.bind(this);
   }
@@ -86,21 +90,28 @@ export default class CriarLembreteScreen extends React.Component {
     );
 }
 
-  onPress () {
+  async onPress () {
+    var decoded = undefined
+    try {
+      var token = await auth.getJWT() // Get token
+      var decoded = jwtDecode(token);
+    }
+    catch (e) {console.log(e)}
     var value = this.refs.form.getValue();
     if (value != null) {
+      console.log(value.data)
         var formData = {
-            timestamp : moment(value.data).utc().format().slice(0, -1),
+            timestamp : moment(value.data).format('YYYY-MM-DD HH:mm:ss'),
             concluido: 0,
-            idFuncionario: 1,
+            idFuncionario: decoded.user.idFuncionario,
             texto: value.texto,
             utente: value.utente
         }
-        axios.post(`http://${conf.host}:${conf.port}/lembretes`, formData) 
+        axios.post(`http://${conf.host}:${conf.port}/lembretes`, formData,
+        { headers: { Authorization: 'Bearer ' + token }})
         .then(res => {this.handleRegister(); this.props.navigation.state.params.getData(); this.props.navigation.navigate('Lembretes')})
         .catch(err => {})
     }
-
   }
 
   render() {

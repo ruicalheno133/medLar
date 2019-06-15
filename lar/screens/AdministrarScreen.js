@@ -3,7 +3,9 @@ import { ScrollView, StyleSheet, Text, View, FlatList} from 'react-native';
 import { ListItem, Avatar } from 'react-native-elements'
 import { LinearGradient } from 'expo';
 import MedicamentoList from '../components/MedicamentoList'
-
+var axios = require('axios')
+var conf = require('../myConfig.json')
+var auth = require('../auth')
 
 /**
  * 
@@ -22,6 +24,30 @@ export default class AdministrarScreen extends React.Component {
     }
   };
 
+  constructor(props){
+    super(props)
+    this.state = {
+      utente: {}
+    }
+    this.getData = this.getData.bind(this)
+  }
+
+  componentWillMount(){
+    this.getData()
+  }
+
+  async getData(){
+    var token = await auth.getJWT() // Get token
+    axios.get(`http://${conf.host}:${conf.port}/utentes/${this.props.navigation.getParam('idUtente', null)}`,
+    { headers: { Authorization: 'Bearer ' + token }}) 
+    .then(data => {
+      this.setState({
+        isLoading: false,
+        utente: data.data[0]
+      })
+    })
+    .catch(err => {})
+  }
 
   render() {
     return (
@@ -40,7 +66,7 @@ export default class AdministrarScreen extends React.Component {
             />
             </View>
                 <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-                    <Text style={{color:'white', fontSize: 20, fontWeight: '800'}}>Rui Calheno</Text>
+                    <Text style={{color:'white', fontSize: 20, fontWeight: '800'}}>{this.state.utente.nome}</Text>
                 </View>
         </LinearGradient>
         <View style={{flex: 6, marginTop: 10}}>

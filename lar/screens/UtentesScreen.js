@@ -1,10 +1,11 @@
 import React from 'react';
 import { ScrollView, StyleSheet, ActivityIndicator, View} from 'react-native';
-import { ListItem, Avatar, Button } from 'react-native-elements'
+import { Button } from 'react-native-elements'
 import { FontAwesome } from '@expo/vector-icons';
 import axios from 'axios'
 import UtentesList from '../components/UtentesList'
 var conf = require('../myConfig.json')
+var auth = require('../auth')
 
 export default class UtentesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -32,8 +33,11 @@ export default class UtentesScreen extends React.Component {
 
 
   /* Fetch data from API*/
-  getData() {
-    axios.get(`http://${conf.host}:${conf.port}/utentes`) 
+  async getData() {
+    var token = await auth.getJWT() // Get token
+
+    axios.get(`http://${conf.host}:${conf.port}/utentes`,
+    { headers: { Authorization: 'Bearer ' + token }})
       .then(data => {
         this.setState({
           isLoading: false,
