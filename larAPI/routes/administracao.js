@@ -1,6 +1,12 @@
 var express = require('express');
 var administracaoController = require('../controllers/administracao')
 var router = express.Router();
+var passport = require('passport')
+
+/* Autenticação */
+router.get('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
+router.post('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
+router.delete('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
 
 /* 
  *  Rotas relacionadas com as tarefas de administração 
@@ -16,6 +22,7 @@ router.get('/', function(req, res, next) {
  *
  */
 router.get('/porAltura/:altura', function(req, res, next) {
+  console.log(req.headers)
   administracaoController.listarUtentesAMedicar(req.params.altura)
                          .then(data => {res.jsonp(data)})
                          .catch(err => {console.log(err)})
@@ -32,6 +39,35 @@ router.get('/porDoente/:utente/:altura', function(req, res, next) {
   administracaoController.listarAdministracao(req.params.utente, req.params.altura)
                          .then(data => {res.jsonp(data)})
                          .catch(err => {console.log(err)})
+});
+
+/**
+ * Inserir nova administração
+ */
+router.post('/registarAdministracao',(req,res) => {
+  console.log(req.body)
+  administracaoController.inserir(req.body)
+      .then(data => {
+          res.jsonp(data)
+      })
+      .catch(erro => {
+        console.log(erro)
+          res.status(500).send(erro)
+      })
+});
+
+/**
+ * Atualizar administração
+ */
+router.put('/atualizarAdministracao/:idAdministracao',(req,res) => {
+  administracaoController.atualizar(req.params.idAdministracao, req.body)
+      .then(data => {
+          res.jsonp(data)
+      })
+      .catch(erro => {
+        console.log(erro)
+          res.status(500).send(erro)
+      })
 });
 
 

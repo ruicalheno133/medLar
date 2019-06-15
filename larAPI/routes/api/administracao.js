@@ -18,12 +18,14 @@ router.get('/', (req,res) => {
 /**
  * Inserir nova administração
  */
-router.post('/',(req,res) => {
+router.post('/registarAdministracao',(req,res) => {
+    console.log(req.body)
     administracaoController.inserir(req.body)
         .then(data => {
             res.jsonp(data)
         })
         .catch(erro => {
+            console.log(erro)
             res.status(500).send(erro)
         })
 });

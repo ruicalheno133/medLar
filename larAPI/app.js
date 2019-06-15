@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var db =  require('./database/connection');
 var bodyParser = require('body-parser');
-
+var passport = require('passport')
 
 var administracaoAPIrouter = require('./routes/api/administracao');
 var fichaMedicacaoAPIrouter = require('./routes/api/fichaMedicacao');
@@ -19,7 +19,7 @@ var lembretesRouter = require('./routes/lembretes');
 var administracaoRouter = require('./routes/administracao');
 var funcionariosRouter = require('./routes/funcionarios');
 var fichasMedicacaoRouter = require('./routes/fichasMedicacao');
-
+var authRouter = require('./routes/auth');
 
 var app = express();
 
@@ -27,6 +27,10 @@ var app = express();
 db.authenticate()
   .then(() => {console.log('Connected to Database')})
   .catch(err => {console.log('Unable to connect to Database' + err)})
+
+ app.use(passport.initialize())
+
+require('./authentication/auth')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -37,7 +41,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser());
 
 // Rotas API
 app.use('/api/utentes',utenteAPIrouter);
@@ -52,7 +55,8 @@ app.use('/utentes', utentesRouter);
 app.use('/lembretes', lembretesRouter);
 app.use('/administracao', administracaoRouter);
 app.use('/funcionarios',funcionariosRouter);
-app.use('/fichasMedicacao', fichasMedicacaoRouter)
+app.use('/fichaMedicacao', fichasMedicacaoRouter)
+app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

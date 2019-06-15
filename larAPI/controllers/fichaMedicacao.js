@@ -20,9 +20,10 @@ module.exports.listar = () => {
  * <!> Não esquecer que a separação por dias tem de ser feita do lado do servidor <!>
  */
 module.exports.obterFichaMedicacao = (idUtente) => {
-    return sequelize.query(`SELECT fm.* 
-                            FROM med_bd.FichaMedicacao as fm 
-                            WHERE fm.idUtente = :idUtente AND fm.estado = 1;`,
+    return sequelize.query(`SELECT fm.* , m.nome
+    FROM med_bd.FichaMedicacao as fm 
+    INNER JOIN Medicamento as m ON fm.idMedicamento = m.idMedicamento
+    WHERE fm.idUtente = :idUtente AND fm.estado = 1;`,
         { 
             replacements: { 
                 idUtente: idUtente 
@@ -31,6 +32,7 @@ module.exports.obterFichaMedicacao = (idUtente) => {
         }
     )
 };
+
 
 
 /**
@@ -70,4 +72,6 @@ module.exports.mudarEstadoFichaMedicacao = (idUtente, idMedicamento) => {
             },
             type: sequelize.QueryTypes.UPDATE
         })
-};
+}
+
+

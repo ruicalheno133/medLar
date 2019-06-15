@@ -6,7 +6,7 @@ module.exports = (sequelize, type) => {
             autoIncrement: true
         },
         timestamp: {
-            type: 'TIMESTAMP',
+            type: 'DATETIME',
             allowNull: false
         },
         texto:{
@@ -19,6 +19,10 @@ module.exports = (sequelize, type) => {
         },
         concluido:{
             type: type.TINYINT(1),
+            allowNull: false
+        },
+        idFuncionario:{
+            type: type.INTEGER,
             allowNull: false
         }
     },

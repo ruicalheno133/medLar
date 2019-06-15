@@ -2,6 +2,12 @@ var express = require('express');
 var funcionarioController = require('../controllers/funcionario')
 var router = express.Router();
 var bcrypt = require('bcrypt');
+var passport = require('passport')
+
+/* Autenticação */
+router.get('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
+router.post('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
+router.delete('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
 
 /**
  * Listar todos os funcionários

@@ -17,6 +17,9 @@ module.exports = (db, Sequelize) => {
             type : Sequelize.INTEGER,
             //primaryKey : true
         },
+        altura: {
+            type : Sequelize.INTEGER,
+        },
         estado : {
             type : Sequelize.BOOLEAN,
             allowNull: false
@@ -27,7 +30,7 @@ module.exports = (db, Sequelize) => {
         },
         observacao : {
             type : Sequelize.STRING(45),
-            allowNull: false
+            allowNull: true
         }
     }, 
     {

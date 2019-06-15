@@ -1,6 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var lembreteController = require('../controllers/lembrete')
+var passport = require('passport')
+
+/* Autenticação */
+router.get('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
+router.post('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
+router.delete('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
 
 router.get('/', function(req, res, next) {
   res.send('Rotas dos lembretes');

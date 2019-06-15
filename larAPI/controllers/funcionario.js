@@ -33,3 +33,17 @@ module.exports.listarID = (idFuncionario) => {
     })
 };
 
+/**
+ * Selecionar funcionário por email
+ */
+module.exports.listarEmail = (emailFuncionario) => {
+    return sequelize.query(`SELECT f.* FROM med_bd.Funcionario AS f
+                            WHERE f.email = :emailFuncionario`,
+    {
+        replacements:{
+            emailFuncionario: emailFuncionario
+        },
+        type: sequelize.QueryTypes.SELECT
+    })
+};
+

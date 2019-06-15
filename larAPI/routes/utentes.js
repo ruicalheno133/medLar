@@ -1,6 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var utenteController = require('../controllers/utente')
+var passport = require('passport')
+
+/* Autenticação */
+router.get('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
+router.post('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
+router.delete('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
 
 /* GET - Lista todos os utentes */
 router.get('/', function(req, res, next) {
