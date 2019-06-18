@@ -15,12 +15,7 @@ router.get('/', function(req, res, next) {
   res.send('Rotas da administração');
 });
 
-/*
- *  method: GET 
- *  return: Lista de Utentes a administrar
- *          em determinada altura do dia.
- *
- */
+/* GET - Listar todos os Utentes a administrar em determinada altura do dia. */
 router.get('/porAltura/:altura', function(req, res, next) {
   console.log(req.headers)
   administracaoController.listarUtentesAMedicar(req.params.altura)
@@ -28,22 +23,14 @@ router.get('/porAltura/:altura', function(req, res, next) {
                          .catch(err => {console.log(err)})
 });
 
-/*
- *  method: GET 
- *  return: Lista dos medicamentos a administrar 
- *          e respetivas quantidades e informações 
- *          de conclusão, por Utente e Altura do dia
- *
- */
+/* GET - Listar todos os medicamentos a administrar e respetivas quantidades e informações de conclusão, por Utente e Altura do dia*/
 router.get('/porDoente/:utente/:altura', function(req, res, next) {
   administracaoController.listarAdministracao(req.params.utente, req.params.altura)
                          .then(data => {res.jsonp(data)})
                          .catch(err => {console.log(err)})
 });
 
-/**
- * Inserir nova administração
- */
+/* POST - Criar nova administração */
 router.post('/registarAdministracao',(req,res) => {
   console.log(req.body)
   administracaoController.inserir(req.body)
@@ -56,9 +43,7 @@ router.post('/registarAdministracao',(req,res) => {
       })
 });
 
-/**
- * Atualizar administração
- */
+/* PUT - Atualizar administração específica */
 router.put('/atualizarAdministracao/:idAdministracao',(req,res) => {
   administracaoController.atualizar(req.params.idAdministracao, req.body)
       .then(data => {

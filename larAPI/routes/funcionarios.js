@@ -9,22 +9,7 @@ router.get('/*', passport.authenticate('jwt', {session: false}), (req, res, next
 router.post('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
 router.delete('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
 
-/**
- * Listar todos os funcionários
- */
-router.get('/', (req, res) => {
-    funcionarioController.listar()
-        .then(data => {
-            res.jsonp(data)
-        })
-        .catch(erro => {
-            res.status(500).send(erro)
-        })
-});
-
-/**
- * Listar Funcionário por ID
- */
+/** GET - Listar informação de funcionário específico */
 router.get('/:id', (req, res) => {
     funcionarioController.listarID(req.params.id)
         .then(data => {
@@ -35,10 +20,7 @@ router.get('/:id', (req, res) => {
         })
 });
 
-/**
- * Inserir novo funcionário
- */
-/* POST - Criar novo utente */
+/** POST - Criar novo funcionário */
 router.post('/', function(req, res) {
     var newObj = {...req.body , ...{idFuncionario: null}}
     bcrypt.hash(newObj["password"], 10, function(err, hash) {

@@ -7,9 +7,7 @@ var passport = require('passport')
 router.get('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
 router.post('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
 
-/**
- * Listar todos os medicamentos
- */
+/* GET - Listar todos os medicamentos */
 router.get('/', (req,res) => {
     medicamentoController.listar()
         .then(data => {
@@ -19,19 +17,5 @@ router.get('/', (req,res) => {
             res.status(500).send(erro)
         })
 });
-
-/**
- * Inserir medicamento
- */
-router.post('/', (req,res) => {
-    medicamentoController.inserir(req.body)
-        .then(data => {
-            res.jsonp(data)
-        })
-        .catch(erro => {
-            res.status(500).send(erro)
-        })
-});
-
 
 module.exports = router

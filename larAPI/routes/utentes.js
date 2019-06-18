@@ -8,14 +8,14 @@ router.get('/*', passport.authenticate('jwt', {session: false}), (req, res, next
 router.post('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
 router.delete('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
 
-/* GET - Lista todos os utentes */
+/* GET - Listar todos os utentes */
 router.get('/', function(req, res, next) {
   utenteController.listar()
              .then(dados => {res.jsonp(dados)})
              .catch(erro => res.status(500).send(erro))
 });
 
-/* GET - Lista informação de utente especifico */
+/* GET - Listar informação de utente especifico */
 router.get('/:id', function(req, res, next) {
   utenteController.listarPorID(req.params.id)
              .then(dados => {res.jsonp(dados)})
@@ -31,7 +31,7 @@ router.post('/', function(req, res) {
                   .catch(erro => console.log(erro))
 });
 
-/* PUT - Atualizar utente */
+/* PUT - Atualizar informação de utente específico */
 router.put('/', function(req, res) {
   var utente = req.body
   utenteController.atualizar(utente)

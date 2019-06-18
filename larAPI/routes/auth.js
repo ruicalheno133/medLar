@@ -4,7 +4,7 @@ var jwt = require('jsonwebtoken')
 var router = express.Router();
 
 
-/* POST processa registo. */
+/* POST  - Processar registo. */
 router.post('/registo', (req, res, next) => {
     passport.authenticate('registo', (err, user, info) => { 
             if(err) return next(err)
@@ -12,7 +12,7 @@ router.post('/registo', (req, res, next) => {
     })(req, res, next);
   });
 
-/* GET processa logout. */
+/* GET - Processar logout. */
 router.get('/logout', function(req, res) {
     req.logout()
     res.clearCookie('token')
@@ -20,7 +20,7 @@ router.get('/logout', function(req, res) {
   });
 
 
-/* POST processa login. */
+/* POST - Processar login. */
 router.post('/login', (req, res, next) => {
     passport.authenticate('login', (err, user, info) => { 
             if(!user){
