@@ -106,12 +106,13 @@ Alert.alert(
     if (value != null) {
       if (value.password != value.samePassword) {
         this.refs.form.refs.input.refs.samePassword.setState({hasError: true})
-      } else 
+      } else{
+        console.log(`http://${myConf.host}:${myConf.port}/auth/registo`)
         axios.post(`http://${myConf.host}:${myConf.port}/auth/registo`, value)
         .then(res => {this.handleRegister(); this.props.navigation.navigate('Login')})
         .catch(err => {})
+      }
     }
-
   }
 
   render() {

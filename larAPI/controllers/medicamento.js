@@ -13,7 +13,7 @@ module.exports.inserir = (medicamento) => {
  * Listar todos os medicamentos
  */
 module.exports.listar = () => {
-    return sequelize.query(`SELECT CONCAT (med.nome, " - ", med.forma) as 'Medicamento'
+    return sequelize.query(`SELECT med.idMedicamento,  CONCAT (med.nome, " - ", med.forma) as 'Medicamento'
                             FROM med_bd.Medicamento AS med;`,
     {
         type: sequelize.QueryTypes.SELECT

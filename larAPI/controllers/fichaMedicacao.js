@@ -20,7 +20,7 @@ module.exports.listar = () => {
  * <!> Não esquecer que a separação por dias tem de ser feita do lado do servidor <!>
  */
 module.exports.obterFichaMedicacao = (idUtente) => {
-    return sequelize.query(`SELECT fm.* , m.nome
+    return sequelize.query(`SELECT fm.* , m.nome, m.forma
     FROM med_bd.FichaMedicacao as fm 
     INNER JOIN Medicamento as m ON fm.idMedicamento = m.idMedicamento
     WHERE fm.idUtente = :idUtente AND fm.estado = 1;`,

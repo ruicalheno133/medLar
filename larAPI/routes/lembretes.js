@@ -12,26 +12,26 @@ router.get('/', function(req, res, next) {
   res.send('Rotas dos lembretes');
 });
 
-/* GET - Lista todos os lembretes */
-router.get('/listarTodos/:idUtente', function(req, res, next) {
+/* GET - Lista todos os lembretes de um utente */
+router.get('/utente/:idUtente', function(req, res, next) {
   lembreteController.listar(req.params.idUtente)
     .then(data => {res.jsonp(data)})
     .catch(err => {console.log(err)})
 });
 
 /* GET - Lista lembrete especifico */
-router.get('/listarUm/:id', function(req, res, next) {
+router.get('/:id', function(req, res, next) {
   res.send('Lista lembrete especifico');
 });
 
-/* GET - Lista lembrete especifico */
-router.delete('/concluir/:id', function(req, res, next) {
+/* PUT - Apagar um lembrete */
+router.put('/concluir/:id', function(req, res, next) {
   lembreteController.concluirLembrete(req.params.id)
     .then(data => {res.end()})
     .catch(err => {console.log(err)})
 });
 
-/* GET - Lista lembrete especifico */
+/* POST - Criar um lembrete */
 router.post('/', function(req, res, next) {
   lembreteController.inserir(req.body)
     .then(data => {res.end()})

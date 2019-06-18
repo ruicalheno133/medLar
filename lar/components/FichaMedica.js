@@ -40,7 +40,7 @@ class FichaMedica extends React.Component {
  async getData() {
     var token = await auth.getJWT() // Get token
     
-    axios.get(`http://${conf.host}:${conf.port}/fichaMedicacao/${this.props.utenteInfo.idUtente}`,
+    axios.get(`http://${conf.host}:${conf.port}/fichaMedicacao/utente/${this.props.utenteInfo.idUtente}`,
               { headers: { Authorization: 'Bearer ' + token }})
       .then((data)=> {
           console.log(data.data)
@@ -69,7 +69,7 @@ class FichaMedica extends React.Component {
                 { this.state.medicamentoList.map((m, i) => (
                     <ListItem
                     key={i}
-                    title={m.nome + ' - ' + m.quantidade + ' ' + m.unidade }
+                    title={`${m.nome} (${m.forma}) - ${m.quantidade} ${m.unidade}`}
                     chevron
                     onPress={() => this.props.navigation.navigate('Medicamento', {utente: this.props.utenteInfo, medicamento: m})}
                     containerStyle={{borderBottomColor: '#d3d3d3', borderBottomWidth: 1}}

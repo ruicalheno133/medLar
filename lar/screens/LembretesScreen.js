@@ -39,7 +39,7 @@ async getData() {
     var decoded = await jwtDecode(token);
   }
   catch (e) {}
-  axios.get(`http://${conf.host}:${conf.port}/lembretes/listarTodos/${decoded.user.idFuncionario}`,
+  axios.get(`http://${conf.host}:${conf.port}/lembretes/utente/${decoded.user.idFuncionario}`,
             { headers: { Authorization: 'Bearer ' + token }}) // Atenção: é preciso ir buscar o idFuncionário a alguma lado (jwt?)
         .then(data => {
             this.setState({

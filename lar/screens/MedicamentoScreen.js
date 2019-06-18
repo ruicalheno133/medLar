@@ -12,6 +12,25 @@ var auth = require('../auth')
 
 var dias = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
 
+
+var DiasSemana = [
+  { bit: 1, string:'Segunda-Feira'},
+  { bit: 2, string:'Terça-Feira'},
+  { bit: 4, string:'Quarta-Feira'},
+  { bit: 8, string:'Quinta-Feira'},
+  { bit: 16, string:'Sexta-Feira'},
+  { bit: 32, string:'Sábado'},
+  { bit: 64, string:'Domingo'},
+  ]
+
+var PeriodosDia = [
+  {bit: 1, string:'Pequeno-Almoço'},
+  {bit: 2, string:'Almoço'},
+  {bit: 4, string:'Lanche'},
+  {bit: 8, string:'Jantar'},
+  {bit: 16, string:'Ceia'}
+  ]
+
 /**
  * 
  * Screen de adminsitração de medicação (a determinado utente)
@@ -33,9 +52,14 @@ export default class MedicamentoScreen extends React.Component {
     super(props)
     this.state = {
       isLoading: true,
-      medicamentoTableData: []
+      medicamentoTableData: [],
+      diasSemana: DiasSemana,
+      periodosDia: PeriodosDia,
+      dias: this.props.navigation.getParam('medicamento').dias,
+      periodos: this.props.navigation.getParam('medicamento').periodosDia
     }
     this.getMedicamentoTableData=this.getMedicamentoTableData.bind(this);
+    this.renderDias = this.renderDias.bind(this);
   }
 
   getMedicamentoTableData(){
@@ -57,26 +81,33 @@ export default class MedicamentoScreen extends React.Component {
 
   }
 
+  renderDias(){
+    let dias = this.props.navigation.getParam('medicamento').dias;
+    Object.entries(DiasSemana).forEach(entry => {
+      let key = entry[0];
+      let value = entry[1];
+      if((dias & key) !== 0){
+        console.log(value)
+        return(
+          <Text>value</Text>
+        )
+      }     
+    })
+  }
+
   render() {
     
     return (
       <View style={styles.container}>
         <LinearGradient colors={['#3C6478', '#3990A4']} style={{flex: 2}}>
-          <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
-            <Avatar 
-            rounded
-            size='large'
-            imageProps={{resizeMode: 'cover'}}
-            containerStyle={{borderRadius: 100}}
-          source={{
-            uri:
-              'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-          }}
-            />
-            </View>
-                <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-                    <Text style={{color:'white', fontSize: 20, fontWeight: '800'}}>{this.props.navigation.getParam('utente').nome}</Text>
-                </View>
+          <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+            <Text style={{color:'white', fontSize: 20, fontWeight: '800'}}>
+              {`${this.props.navigation.getParam('medicamento').nome} (${this.props.navigation.getParam('medicamento').forma})`}
+            </Text>
+            <Text style={{color:'white', fontSize: 16, fontWeight: '400'}}>
+              {`${this.props.navigation.getParam('medicamento').quantidade} ${this.props.navigation.getParam('medicamento').unidade}`}
+            </Text>
+          </View>
         </LinearGradient>
         <View style={{flex: 6, padding: 10}}>
             <Text style={{fontSize: 15, fontWeight: '600'}}>
@@ -104,17 +135,41 @@ export default class MedicamentoScreen extends React.Component {
           </Table>
 
           <Text style={{fontSize: 15, fontWeight: '600'}}>
-              de: 
+              Data de início:
               <Text style={{fontSize: 15, fontWeight: '100'}}> 
               { '\t\t' + this.props.navigation.getParam('medicamento').dataInicio}
               </Text>
             </Text>
-          <Text style={{fontSize: 15, fontWeight: '600'}}>
-              até: 
+          {this.props.navigation.getParam('medicamento').dataFim ?
+            <Text style={{fontSize: 15, fontWeight: '600'}}>
+            Data de final:
               <Text style={{fontSize: 15, fontWeight: '100'}}> 
               {'\t\t' + this.props.navigation.getParam('medicamento').dataFim}
               </Text>
-          </Text>
+            </Text>   
+          :
+            null       
+          }
+
+
+          <View style={{marginTop: 10, flex:1}}>
+
+
+            {DiasSemana.map((dia,index) => {
+              if((this.state.dias & dia.bit ) !== 0){
+                return <Text key={index}>{dia.string}</Text>
+              }
+              PeriodosDia.map((periodo, index) => {
+                var str = '';
+                if((this.state.periodos & periodo.bit) !== 0){
+                  return <Text key={index}>{periodo.string}</Text>
+                }
+              })
+            })}
+
+            {(this.state.periodos & 1) !== 0 ? <Text>{PeriodosDia["1"]}</Text> : null}
+
+          </View>
 
             <View style={{alignItems:'center', marginTop: 10, position:'absolute', bottom: 10, right:10, zIndex: 1}}>
                 <Button

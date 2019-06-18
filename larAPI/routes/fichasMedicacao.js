@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
   });
 
 /* GET - Listar as fichas de medicação de um utente especifico */
-router.get('/:id', function(req, res, next) {
+router.get('/utente/:id', function(req, res, next) {
     fichaMedicacaoController.obterFichaMedicacao(req.params.id)
                             .then(dados => {
                               res.jsonp(dados)

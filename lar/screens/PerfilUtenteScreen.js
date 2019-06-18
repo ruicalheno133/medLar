@@ -105,10 +105,10 @@ export default class PerfilUtenteScreen extends React.Component {
             size='large'
             imageProps={{resizeMode: 'cover'}}
             containerStyle={{borderRadius: 100}}
-          source={{
-            uri:
-              'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-          }}
+            source={{
+              uri:
+                'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+            }}
             />
             </View>
                 <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
@@ -129,7 +129,7 @@ export default class PerfilUtenteScreen extends React.Component {
             <View style={{alignItems:'center', marginTop: 10, position:'absolute', bottom: 10, right:10, zIndex: 1}}>
                 <Button
                     title="Novo medicamento"
-                    onPress={()=>this.props.navigation.navigate('NovoMedicamento')}
+                    onPress={()=>this.props.navigation.navigate('NovoMedicamento',{idUtente: this.state.utenteInfo.idUtente})}
                     type="outline"
                     icon={<FontAwesome name="edit" size={20} style={{color: '#3990A4'}}/>}
                     buttonStyle={{borderRadius: 70, borderColor: '#3990A4'}}

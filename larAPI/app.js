@@ -19,6 +19,7 @@ var lembretesRouter = require('./routes/lembretes');
 var administracaoRouter = require('./routes/administracao');
 var funcionariosRouter = require('./routes/funcionarios');
 var fichasMedicacaoRouter = require('./routes/fichasMedicacao');
+var medicamentosRouter = require('./routes/medicamentos');
 var authRouter = require('./routes/auth');
 
 var app = express();
@@ -55,7 +56,8 @@ app.use('/utentes', utentesRouter);
 app.use('/lembretes', lembretesRouter);
 app.use('/administracao', administracaoRouter);
 app.use('/funcionarios',funcionariosRouter);
-app.use('/fichaMedicacao', fichasMedicacaoRouter)
+app.use('/fichaMedicacao', fichasMedicacaoRouter);
+app.use('/medicamentos',medicamentosRouter);
 app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
