@@ -22,7 +22,7 @@ module.exports = (db, Sequelize) => {
             allowNull: false
         },
         foto : {
-            type : Sequelize.BLOB,
+            type : Sequelize.STRING(100),
             allowNull: true
         },
         estado : {

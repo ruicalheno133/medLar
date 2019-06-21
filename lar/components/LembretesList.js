@@ -67,8 +67,18 @@ class LembreteList extends React.Component {
                             l.concluido == 0 ? 
                             <ListItem
                                 key={l.idLembrete}
-                                title={<Text>Utente: {l.utente}</Text>}
-                                subtitle={<View><Text style={{opacity: 0.7}}>{l.texto}</Text><Text style={{opacity: 0.7}}>{moment(l.timestamp, "YYYY-MM-DD H:mm:ss").format('DD/MM/YY - HH:mm')}</Text></View>}
+                                title={l.utente ? <Text>Utente: {l.utente}</Text> : null}
+                                subtitle={
+                                    l.timestamp ? 
+                                    <View>
+                                        <Text style={{opacity: 0.7}}>{l.texto}</Text>
+                                        <Text style={{opacity: 0.7}}>{moment(l.timestamp, "YYYY-MM-DD H:mm:ss").format('DD/MM/YY - HH:mm')}</Text>
+                                    </View>
+                                    :
+                                    <View>
+                                        <Text style={{opacity: 0.7}}>{l.texto}</Text>
+                                    </View>
+                                }
                                 rightTitle={''}
                                 leftElement={
                                     <FontAwesome5 name ={'bell'} size={30} style={{color:'black'}}></FontAwesome5>

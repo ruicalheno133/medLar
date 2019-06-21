@@ -18,7 +18,11 @@ class UtentesList extends React.Component {
   render() {
     const list = this.props.utentesList.map((l,i) => (
       <ListItem
-      leftAvatar={{ size: "small", rounded: true, source: { uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' } }}
+      leftAvatar={l.foto ? 
+          { size: "small", rounded: true, source: { uri: `http://${conf.host}:${conf.port}/static/images/${l.foto}` } }
+        :
+          { size: "small", rounded: true, source: { uri: `http://${conf.host}:${conf.port}/static/images/icon.png` } }
+      }
       key={l.idUtente}
       title={l.nome}
       subtitle={'' + l.idUtente}

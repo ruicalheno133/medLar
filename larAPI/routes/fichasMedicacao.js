@@ -15,6 +15,17 @@ router.get('/', function(req, res, next) {
                             .catch(erro => res.status(500).send(erro))
   });
 
+router.get('/:id', (req,res) => {
+    fichaMedicacaoController.listarUm(req.params.id)
+                            .then(dados => {
+                              res.jsonp(dados)
+                            })
+                            .catch(erro => {
+                              console.log(erro)
+                              res.status(500).send(erro)
+                            })
+})
+
 /* GET - Listar todas as fichas de medicação de um utente especifico */
 router.get('/utente/:id', function(req, res, next) {
     fichaMedicacaoController.obterFichaMedicacao(req.params.id)
@@ -33,6 +44,30 @@ router.get('/Medicamento/:idMedicamento/:idUtente/:quantidade/:unidade', functio
                           .catch(erro => {console.log(erro);res.status(500).send(erro)})
 });
 
+/** PUT - Mudar estado de uma ficha de medicação */
+router.put('/mudarEstado/:idFichaMedicacao', (req,res)=>{
+  fichaMedicacaoController.mudarEstadoFichaMedicacao(req.params.idFichaMedicacao)
+                          .then(dados => {
+                            res.jsonp(dados)
+                          })
+                          .catch(erro => {
+                            console.log(erro)
+                            res.status(500).send(erro)
+                          })
+})
+
+/** PUT - Mudar dias e periodo de uma ficha de medicação */
+router.put('/editar/:idFichaMedicacao', (req,res) => {
+  fichaMedicacaoController.editarFichaMedicacao(req.params.idFichaMedicacao, req.body.dias, req.body.periodosDia)
+                          .then(dados => {
+                            res.jsonp(dados)
+                          })
+                          .catch(erro => {
+                            console.log(erro)
+                            res.status(500).send(erro)
+                          })
+})
+
 /* POST - Criar nova ficha de medicação */
 router.post('/', (req,res) => {
     var newObj = {...req.body , ...{idFichaMedicacao: null, estado: 1}}
@@ -40,7 +75,6 @@ router.post('/', (req,res) => {
                             .then(data => {res.jsonp(data)})
                             .catch(erro => {res.status(500).send(erro)})
 })
-
 
 
 module.exports = router

@@ -6,6 +6,7 @@ var logger = require('morgan');
 var db =  require('./database/connection');
 var bodyParser = require('body-parser');
 var passport = require('passport')
+var cors = require('cors');
 
 var administracaoAPIrouter = require('./routes/api/administracao');
 var fichaMedicacaoAPIrouter = require('./routes/api/fichaMedicacao');
@@ -29,7 +30,9 @@ db.authenticate()
   .then(() => {console.log('Connected to Database')})
   .catch(err => {console.log('Unable to connect to Database' + err)})
 
- app.use(passport.initialize())
+
+  app.use(passport.initialize())
+app.use(cors({origin: true}));
 
 require('./authentication/auth')
 
@@ -59,6 +62,9 @@ app.use('/funcionarios',funcionariosRouter);
 app.use('/fichaMedicacao', fichasMedicacaoRouter);
 app.use('/medicamentos',medicamentosRouter);
 app.use('/auth', authRouter);
+
+app.use('/static', express.static('public'))
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

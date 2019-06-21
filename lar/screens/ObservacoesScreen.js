@@ -84,10 +84,11 @@ export default class ObservacoesScreen extends React.Component {
   }
 
   render() {
+    let medicamento = this.props.navigation.getParam('medicamento')
     return (
       <View style={styles.container}>
       <View style={{flex:1}}>
-      <TitleSection title={"Medicamento"}/>
+      <TitleSection title={`${medicamento.Medicamento} ${medicamento.quantidade}${medicamento.unidade}`}/>
       </View>
       <View style={{flex:3, padding: 10}}>
       <Text style={{ fontSize: 20, fontWeight: '400' }}>Adicione observações:</Text>
@@ -99,27 +100,29 @@ export default class ObservacoesScreen extends React.Component {
               this.setState({pickerValue: itemValue})
             }}
         >
-            <Picker.Item label="Selecione a causa" value="def" />
+            <Picker.Item label="Causa" value="def" />
             <Picker.Item label="Recusou" value="Recusou." />
             <Picker.Item label="Estava em jejum" value="Estava em jejum." />
+            <Picker.Item label="Outro" value="Outro" />
         </Picker>
         </View>
-
-
-        <Text style={{ fontSize: 20, fontWeight: '400' }}>Outro:</Text>
-        <View style={{margin: 5, borderWidth: 1, borderColor:'#d3d3d3', borderRadius:5
-    }}>
-        <TextInput
-            multiline = {true}
-            numberOfLines = {4}
-            editable = {true}
-            maxLength = {50}
-            placeholder="Outra causa..."
-            onChangeText={(text)=> {this.setState({text})}}
-            value={this.state.text}
-            style={{textAlignVertical: 'top', padding: 5}}
-      />
-        </View>
+        {this.state.pickerValue === 'Outro' &&
+          <View>
+            <Text style={{ fontSize: 20, fontWeight: '400' }}>Outro:</Text>
+            <View style={{margin: 5, borderWidth: 1, borderColor:'#d3d3d3', borderRadius:5}}>
+            <TextInput
+                multiline = {true}
+                numberOfLines = {4}
+                editable = {true}
+                maxLength = {50}
+                placeholder="Outra causa..."
+                onChangeText={(text)=> {this.setState({text})}}
+                value={this.state.text}
+                style={{textAlignVertical: 'top', padding: 5}}
+            />
+            </View>
+          </View>
+        }
         <Button onPress={this.onPress} title='Concluir' 
                     buttonStyle={styles.buttonStyle}
                     containerStyle={styles.buttonContainer}

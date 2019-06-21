@@ -130,18 +130,18 @@ class MedicamentoList extends React.Component {
                 { this.state.medicamentoList.map((m) => (
                     <ListItem
                     roundAvatar
-                    key={m.idMedicamento}
+                    key={m.idFichaMedicacao}
                     title={m.quantidade + ' ' + m.unidade}
                     subtitle={m.Medicamento}
                     rightElement={
-                      <View style={{flexDirection: "row"}}>
+                      <View key={m.idFichaMedicacao} style={{flexDirection: "row"}}>
                         <Button type='clear' onPress={() => this.handleYesPress(m.idAdministracao, m.idMedicamento)} 
                                 icon={this.renderIcon(m.estado, 1)}></Button>
                         <Button type='clear' onPress={() => this.handleNoPress(m)} 
                                 icon={this.renderIcon(m.estado, 0)}></Button>  
                       </View>
                     }
-                    onPress={() => this.props.navigation.navigate('Medicamento')}
+                    //onPress={() => this.props.navigation.navigate('Medicamento')}
                     containerStyle={{borderBottomColor: '#d3d3d3', borderBottomWidth: 1}}
                     />
                 ))

@@ -13,6 +13,8 @@ import RegistarUtenteScreen from '../screens/RegistarUtenteScreen';
 import CriarLembreteScreen from '../screens/CriarLembreteScreen';
 import MedicamentoScreen from '../screens/MedicamentoScreen';
 import NovoMedicamentoScreen from '../screens/NovoMedicamento';
+import EditarFichaMedicacaoScreen from '../screens/EditarFichaMedicacaoScreen';
+import EditarPerfilScreen from '../screens/EditarPerfilScreen';
 
 const TarefasStack = createStackNavigator({
     Tarefas   : PeriodosDiaScreen,
@@ -31,7 +33,9 @@ const UtentesStack = createStackNavigator({
     PerfilUtente: PerfilUtenteScreen,
     Medicamento: MedicamentoScreen,
     NovoMedicamento: NovoMedicamentoScreen,
-    RegistarUtente: RegistarUtenteScreen
+    RegistarUtente: RegistarUtenteScreen,
+    EditarFichaMedicacao: EditarFichaMedicacaoScreen,
+    EditarPerfil: EditarPerfilScreen
 });
 
 UtentesStack.navigationOptions = 

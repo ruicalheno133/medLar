@@ -2,96 +2,24 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, Picker, Alert, View, ActivityIndicator} from 'react-native';
 import { Button, CheckBox } from 'react-native-elements';
 
-var t = require('tcomb-form-native');
-var _ = require('lodash');
 var axios = require('axios')
 import moment from "moment";
 var auth = require('../auth')
 var conf = require('../myConfig.json')
 
-var Form = t.form.Form;
 
-var Unidades = t.enums({
-  Mg: 'mg',
-  G: 'g',
-})
+const myFormatFunction = format => date => moment(date).format(format)
 
-var Utente = t.struct({
-    quantidade: t.Number, 
-    unidade: t.String,              // a required string
-    dataInicio: t.Date,               // a required number
-    dataFim: t.maybe(t.Date)
-  });
-
-  const myFormatFunction = format => date => moment(date).format(format)
-  const stylesheet = _.cloneDeep(t.form.Form.stylesheet);
-
-  // overriding the text color
-  stylesheet.textbox.normal.borderWidth = 0;
-stylesheet.textbox.error.borderWidth = 0;
-stylesheet.textbox.normal.marginBottom = 0;
-stylesheet.textbox.error.marginBottom = 0;
-
-stylesheet.textboxView.normal.borderWidth = 0;
-stylesheet.textboxView.error.borderWidth = 0;
-stylesheet.textboxView.normal.borderRadius = 0;
-stylesheet.textboxView.error.borderRadius = 0;
-stylesheet.textboxView.normal.borderBottomWidth = 1;
-stylesheet.textboxView.error.borderBottomWidth = 1;
-stylesheet.textboxView.normal.marginBottom = 5;
-stylesheet.textboxView.error.marginBottom = 5;
-stylesheet.textboxView.normal.borderBottomColor = 'grey';
-stylesheet.controlLabel.normal.color = 'grey';
-
-
-  var options = {
-    i18n: {
-      optional: '',
-      required: '*'
-    },
-    fields: {
-    dataInicio: {
-        stylesheet: stylesheet,
-        label: 'Data de Inicio',
-        mode: 'date',
-        error: 'Data de inicio inválida.',
-        config: {
-          format: myFormatFunction("DD/MM/YYYY")
-        },
-    },
-    dataFim: {
-        stylesheet: stylesheet,
-        label: 'Data de Fim',
-        mode: 'date',
-        error: 'Data de fim inválida.',
-        config: {
-          format: myFormatFunction("DD/MM/YYYY")
-        }
-    },
-    unidade: {
-        stylesheet: stylesheet,
-        label: 'Unidade',
-        error: 'Unidade errada.'
-    },
-    quantidade: {
-        stylesheet: stylesheet,
-        label: 'Quantidade',
-        error: 'Quantidade errada.'
-    }
-  }};
-
-export default class NovoMedicamentoScreen extends React.Component {
+export default class EditarFichaMedicacaoScreen extends React.Component {
   static navigationOptions = {
-    title: 'Novo medicamento',
+    title: 'Editar ficha de medicação',
   };
 
   constructor(props) {
     super(props)
     this.state = {
+      step:1,
       isLoading: true,
-      medicamentos: [],
-      utente: {},
-      step: 1,
       checkVariables: {
         segunda: false,
         terca: false,
@@ -111,23 +39,44 @@ export default class NovoMedicamentoScreen extends React.Component {
     this.onPress=this.onPress.bind(this);
   }
 
-  async fetchMedicamentos(cb){
-    var token = await auth.getJWT() // Get token
-    axios.get(`http://${conf.host}:${conf.port}/medicamentos`,{headers: {Authorization: `Bearer ${token}`}})
-      .then(data => {
-        this.setState({
-          medicamentos: data.data
-        })
-        cb()
-      })
-      .catch(err => console.log(err))
-  }
-
   componentDidMount(){
-    this.fetchMedicamentos(() => {
-      this.setState({
-        isLoading: false
-      })
+    var checkVariables = {};
+    console.log(this.props.navigation.getParam('fichaMedicacao'))
+    var dias = this.props.navigation.getParam('fichaMedicacao').dias;
+    var periodosDia = this.props.navigation.getParam('fichaMedicacao').periodosDia;
+    if((dias & 1) !== 0) checkVariables.segunda = true 
+      else checkVariables.segunda = false;
+    if((dias & 2) !== 0) checkVariables.terca = true
+      else checkVariables.terca = false;
+    if((dias & 4) !== 0) checkVariables.quarta = true 
+      else checkVariables.quarta = false;
+    if((dias & 8) !== 0) checkVariables.quinta = true 
+      else checkVariables.quinta = false;
+    if((dias & 16) !== 0) checkVariables.sexta = true
+      else checkVariables.sexta = false;
+    if((dias & 32) !== 0) checkVariables.sabado = true
+      else checkVariables.sabado = false;
+    if((dias & 64) !== 0) checkVariables.domingo = true
+      else checkVariables.domingo = false;
+
+    
+    if((periodosDia & 1)  !== 0) checkVariables.pequenoAlmoco = true
+      else checkVariables.pequenoAlmoco = false;
+    if((periodosDia & 2)  !== 0) checkVariables.almoco = true 
+      else checkVariables.almoco = false;
+    if((periodosDia & 4)  !== 0) checkVariables.lanche = true
+      else checkVariables.lanche = false;
+    if((periodosDia & 8)  !== 0) checkVariables.jantar = true
+      else checkVariables.jantar = false;
+    if((periodosDia & 16) !== 0) checkVariables.ceia = true
+      else checkVariables.ceia = false;
+    
+    console.log(checkVariables)
+
+    this.setState({
+      idFichaMedicacao: this.props.navigation.getParam('fichaMedicacao').idFichaMedicacao,
+      checkVariables: checkVariables,
+      isLoading: false
     })
   }
 
@@ -148,20 +97,15 @@ export default class NovoMedicamentoScreen extends React.Component {
     if(checked.sabado)    dias += 32;
     if(checked.domingo)   dias += 64;
     var fichaMed = {
-      idUtente: this.props.navigation.state.params.idUtente,
-      idMedicamento: this.state.idMedicamento,
       periodosDia: periodosDia,
-      quantidade: this.state.value.quantidade,
-      unidade: this.state.value.unidade,
-      dataInicio: this.state.value.dataInicio.toString(),
-      dataFim: this.state.value.dataFim ? this.state.value.dataFim.toString() : null,
+      //dataFim: this.state.value.dataFim ? this.state.value.dataFim.toString() : null,
       dias: dias,
-      estado: 1
     }
+    
     var token = await auth.getJWT() // Get token
-    axios.post(`http://${conf.host}:${conf.port}/fichaMedicacao`,fichaMed,{headers: {Authorization: `Bearer ${token}`}})
+    axios.put(`http://${conf.host}:${conf.port}/fichaMedicacao/editar/${this.state.idFichaMedicacao}`,fichaMed,{headers: {Authorization: `Bearer ${token}`}})
       .then(data => {
-        Alert.alert('Medicação adicionada')
+        Alert.alert('Ficha de medicação editada com sucesso!')
         this.props.navigation.navigate('PerfilUtente', {idUtente: this.props.navigation.state.params.idUtente})
       })
       .catch(err => console.log(err))
@@ -190,40 +134,6 @@ export default class NovoMedicamentoScreen extends React.Component {
       else{
         switch(this.state.step){
           case 1:
-              return (
-                <ScrollView style={styles.container}>
-
-                  <Picker
-                      selectedValue={this.state.idMedicamento}
-                      style={{height: 50, width: '100%', borderColor:'grey', borderWidth:5}}
-                      onValueChange={(itemValue, itemIndex) => {
-                        this.setState({idMedicamento: itemValue})
-                      }}
-                  >
-                    <Picker.Item label="Medicamento" value="" />
-                    {this.state.medicamentos.map(medicamento => {
-                      return(
-                        <Picker.Item key={medicamento.idMedicamento} label={medicamento.Medicamento} value={medicamento.idMedicamento}/>
-                      )
-                    })}
-                  </Picker>
-                  <Form
-                      ref="form"
-                      type={Utente}
-                      options={options}
-                      onChange={this.onChange}
-                      value={this.state.value}
-                      />
-                  <Button onPress={() => {this.setState({step:2})}} 
-                    title='Seguinte' 
-                    buttonStyle={styles.buttonStyle}
-                    containerStyle={styles.buttonContainer}
-                    titleStyle={{color: '#3990A4'}}
-                    type="outline"
-                  />
-                </ScrollView>
-              )
-          case 2:
             return(
               <ScrollView style={styles.container}>
                 <Text>Dias da semana</Text>
@@ -277,14 +187,7 @@ export default class NovoMedicamentoScreen extends React.Component {
                         onPress={() => this.check('domingo')}
                     />
                     <View style={styles.buttonContainer}>
-                      <Button onPress={() => {this.setState({step:1})}} 
-                        title='Voltar' 
-                        buttonStyle={{...styles.buttonStyle, width:'80%'}}
-                        containerStyle={styles.buttonContainer}
-                        titleStyle={{color: '#3990A4'}}
-                        type="outline"
-                      />
-                      <Button onPress={() => {this.setState({step:3})}} 
+                      <Button onPress={() => {this.setState({step:2})}} 
                         title='Seguinte' 
                         buttonStyle={{...styles.buttonStyle, width:'80%'}}
                         containerStyle={styles.buttonContainer}
@@ -294,7 +197,7 @@ export default class NovoMedicamentoScreen extends React.Component {
                     </View>
                   </ScrollView>
             )
-            case 3:
+            case 2:
               return(
                 <ScrollView style={styles.container}>
                   <Text>Períodos do dia</Text>
@@ -334,7 +237,7 @@ export default class NovoMedicamentoScreen extends React.Component {
                       onPress={() => this.check('ceia')}
                   />
                   <View style={styles.buttonContainer}>
-                    <Button onPress={() => {this.setState({step:2})}} 
+                    <Button onPress={() => {this.setState({step:1})}} 
                         title='Voltar' 
                         buttonStyle={{...styles.buttonStyle, width:'80%'}}
                         containerStyle={styles.buttonContainer}

@@ -22,3 +22,7 @@ database/connection.js
 # connection 
 
 database/connection.js
+
+
+# images
+public/images

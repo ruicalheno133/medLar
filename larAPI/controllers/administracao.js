@@ -67,7 +67,7 @@ module.exports.listarUtentesAMedicar = (altura) => {
  * para determinada altura do dia atual
  */
 module.exports.listarAdministracao = (idUtente, altura) => {
-    return sequelize.query(`SELECT m.idMedicamento, CONCAT(m.nome, ' - ', m.forma) as 'Medicamento' , fm.quantidade, fm.unidade, a.estado, a.idAdministracao
+    return sequelize.query(`SELECT m.idMedicamento, CONCAT(m.nome, ' - ', m.forma) as 'Medicamento' , fm.idFichaMedicacao ,fm.quantidade, fm.unidade, a.estado, a.idAdministracao
                             FROM med_bd.Utente as u
                             INNER JOIN med_bd.FichaMedicacao as fm ON fm.idUtente = u.idUtente 
                             INNER JOIN med_bd.Medicamento as m ON fm.idMedicamento = m.idMedicamento

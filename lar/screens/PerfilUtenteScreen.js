@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View, Alert} from 'react-native';
 import { ListItem, Avatar, ButtonGroup, Button} from 'react-native-elements'
 import { LinearGradient } from 'expo';
 import axios from 'axios';
@@ -43,12 +43,40 @@ export default class PerfilUtenteScreen extends React.Component {
     this.setState({selectedIndex})
   }
 
+  async desativarUtente(){
+    var token = await auth.getJWT()
+    Alert.alert(
+      'Desativar Utente',
+      'Tem a certeza que pretende desativar o utente?',
+      [
+        {
+          text: 'Sim', onPress: () => {
+            axios.put(`http://${conf.host}:${conf.port}/utentes/desativar/${this.props.navigation.getParam('idUtente',null)}`, {} ,
+            { headers: {Authorization: `Bearer ${token}`}})
+                .then(() => {
+                  this.props.navigation.navigate(('Utentes'))
+                })
+                .catch(err => {
+                  console.log(err)
+                })
+          }
+        },
+        {
+          text: 'Cancelar',
+          style: 'cancel'
+        }
+      ],
+      {cancelable: true}
+    )
+  }
+
   async getUtenteData() {
     var token = await auth.getJWT() // Get token
     axios.get(`http://${conf.host}:${conf.port}/utentes/${this.props.navigation.getParam('idUtente', null)}`,
     { headers: { Authorization: 'Bearer ' + token }}) // TODO: Change data source
     .then(data => {
       this.setState({
+        selectedIndex:0,
         isLoading: false,
         utenteInfo: data.data[0]
       })
@@ -63,7 +91,7 @@ export default class PerfilUtenteScreen extends React.Component {
 
   render() {
     const buttonInfo = () => <Text>Informação Pessoal</Text>
-    const buttonFicha = () => <Text>Ficha Médica</Text>
+    const buttonFicha = () => <Text>Ficha de Medicação</Text>
     const buttons = [{ element: buttonInfo  }, { element: buttonFicha }]
     let infoFicha ;
     if (this.state.selectedIndex == 0) {
@@ -100,15 +128,16 @@ export default class PerfilUtenteScreen extends React.Component {
       <View style={styles.container}>
         <LinearGradient colors={['#3C6478', '#3990A4']} style={{flex: 2}}>
           <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
-            <Avatar 
-            rounded
-            size='large'
-            imageProps={{resizeMode: 'cover'}}
-            containerStyle={{borderRadius: 100}}
-            source={{
-              uri:
-                'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-            }}
+            <Avatar
+              rounded
+              size='large'
+              imageProps={{resizeMode: 'cover'}}
+              containerStyle={{borderRadius: 100}}
+              source={this.state.utenteInfo.foto ? 
+                        {uri:`http://${conf.host}:${conf.port}/static/images/${this.state.utenteInfo.foto}`}
+                      :
+                        {uri:`http://${conf.host}:${conf.port}/static/images/icon.png`}
+                      }
             />
             </View>
                 <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
@@ -125,20 +154,42 @@ export default class PerfilUtenteScreen extends React.Component {
                 buttons={buttons}
             />
             {infoFicha}
+            
+            {this.state.selectedIndex === 0 ?
+            <View style={{flexDirection:'row',justifyContent:'space-around', paddingTop:10, marginTop: 10, bottom: 10, right:10, zIndex: 1}}>
+              <Button
+                  title="Remover Utente"
+                  onPress={()=> this.desativarUtente()}
+                  type="outline"
+                  icon={<FontAwesome name="edit" size={20} style={{color: '#3990A4'}}/>}
+                  buttonStyle={{borderRadius: 70, borderColor: '#3990A4'}}
+                  titleStyle={{color:'#3990A4'}}
+                  
+              />
+              <Button
+                  title="Editar dados"
+                  onPress={()=>this.props.navigation.navigate('EditarPerfil',{idUtente: this.state.utenteInfo.idUtente})}
+                  type="outline"
+                  icon={<FontAwesome name="edit" size={20} style={{color: '#3990A4'}}/>}
+                  buttonStyle={{borderRadius: 70, borderColor: '#3990A4'}}
+                  titleStyle={{color:'#3990A4'}}
+                  
+              />
+            </View>                     
+            :
+            <View style={{alignItems:'flex-end', paddingTop:10, marginTop: 10, bottom: 10, right:10, zIndex: 1}}>
+              <Button
+                  title="Novo medicamento"
+                  onPress={()=>this.props.navigation.navigate('NovoMedicamento',{idUtente: this.state.utenteInfo.idUtente})}
+                  type="outline"
+                  icon={<FontAwesome name="edit" size={20} style={{color: '#3990A4'}}/>}
+                  buttonStyle={{borderRadius: 70, borderColor: '#3990A4'}}
+                  titleStyle={{color:'#3990A4'}}
+                  
+              />
+            </View>  
+            }
 
-            <View style={{alignItems:'center', marginTop: 10, position:'absolute', bottom: 10, right:10, zIndex: 1}}>
-                <Button
-                    title="Novo medicamento"
-                    onPress={()=>this.props.navigation.navigate('NovoMedicamento',{idUtente: this.state.utenteInfo.idUtente})}
-                    type="outline"
-                    icon={<FontAwesome name="edit" size={20} style={{color: '#3990A4'}}/>}
-                    buttonStyle={{borderRadius: 70, borderColor: '#3990A4'}}
-                    titleStyle={{color:'#3990A4'}}
-                    
-                />
-            </View>
-
-          
         </View>
       </View>
     );

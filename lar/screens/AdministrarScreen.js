@@ -59,10 +59,11 @@ export default class AdministrarScreen extends React.Component {
             size='large'
             imageProps={{resizeMode: 'cover'}}
             containerStyle={{borderRadius: 100}}
-          source={{
-            uri:
-              'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-          }}
+            source={this.state.utente.foto ? 
+              {uri:`http://${conf.host}:${conf.port}/static/images/${this.state.utente.foto}`}
+            :
+              {uri:`http://${conf.host}:${conf.port}/static/images/icon.png`}
+            }
             />
             </View>
                 <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>

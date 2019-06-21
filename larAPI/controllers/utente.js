@@ -5,6 +5,7 @@ var sequelize = require('../database/connection')
  * Inserir utente
  */
 module.exports.inserir = (utente) => {
+    console.log(utente)
     return Utente.create(utente);
 };
 
@@ -12,20 +13,40 @@ module.exports.inserir = (utente) => {
  * Atualizar utente
  */
 module.exports.atualizar = (utente) => {
-    return sequelize.query(`UPDATE med_bd.Utente AS u
+    if(utente.foto){
+        return sequelize.query(`UPDATE med_bd.Utente AS u
+        SET u.nome = :nome, u.nomeUsado = :nomeUsado, 
+            u.dataNascimento = :dataNascimento , u.contEmergencia = :contEmergencia,
+            u.foto = :foto
+        WHERE u.idUtente = :idUtente;`,
+        {
+            replacements:{
+                idUtente: Number(utente.idUtente),
+                nome : utente.nome,
+                nomeUsado : utente.nomeUsado,
+                dataNascimento : utente.dataNascimento,
+                contEmergencia : utente.contEmergencia,
+                foto: utente.foto
+            },
+            type: sequelize.QueryTypes.UPDATE
+        })
+    }
+    else{
+        return sequelize.query(`UPDATE med_bd.Utente AS u
                             SET u.nome = :nome, u.nomeUsado = :nomeUsado, 
-                                u.dataNascimento = str_to_date(:dataNascimento,'%d/%m/%Y'), u.contEmergencia = :contEmergencia
-                            WHERE u.idUtente = :idUtente`,
-                            {
-                                replacements:{
-                                    idUtente: utente.idUtente,
-                                    nome : utente.nome,
-                                    nomeUsado : utente.nomeUsado,
-                                    dataNascimento : utente.dataNascimento,
-                                    contEmergencia : utente.contEmergencia
-                                },
-                                type: sequelize.QueryTypes.UPDATE
-                            })
+                                u.dataNascimento = :dataNascimento , u.contEmergencia = :contEmergencia,
+                            WHERE u.idUtente = :idUtente;`,
+        {
+            replacements:{
+                idUtente: Number(utente.idUtente),
+                nome : utente.nome,
+                nomeUsado : utente.nomeUsado,
+                dataNascimento : utente.dataNascimento,
+                contEmergencia : utente.contEmergencia,
+        },
+        type: sequelize.QueryTypes.UPDATE
+        })
+    }
 };
 
 /**
@@ -45,12 +66,26 @@ module.exports.listar = () => {
 module.exports.listarPorID = (idUtente) => {
     return sequelize.query(`SELECT u.* FROM med_bd.Utente AS u
                             WHERE u.idUtente = :idUtente
-                            AND u.estado = 1`,
+                            AND u.estado = 1;`,
     {
         replacements:{
-            idUtente: idUtente
+            idUtente: Number(idUtente)
         },
         type: sequelize.QueryTypes.SELECT
     })
 };
 
+/**
+ * Desativar um utente
+ */
+module.exports.desativar = (idUtente) => {
+    return sequelize.query(`UPDATE med_bd.Utente AS u
+                            SET estado = 0 
+                            WHERE u.idUtente = :idUtente;`,
+    {
+        replacements:{
+            idUtente: Number(idUtente)
+        },
+        type: sequelize.QueryTypes.UPDATE
+    })
+};

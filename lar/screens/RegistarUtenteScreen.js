@@ -1,6 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, Text, Alert} from 'react-native';
-import { Button } from 'react-native-elements';
+import {ScrollView, View, StyleSheet, Text, Alert} from 'react-native';
+import { Button , Avatar} from 'react-native-elements';
+import { FontAwesome } from '@expo/vector-icons';
+import {ImagePicker, Permissions, Constants, LinearGradient} from 'expo';
+
+
 var t = require('tcomb-form-native');
 var _ = require('lodash');
 var axios = require('axios')
@@ -82,6 +86,8 @@ export default class RegistarUtenteScreen extends React.Component {
 
     this.onPress=this.onPress.bind(this);
     this.handleRegister=this.handleRegister.bind(this);
+    this.getPermissionAsync = this.getPermissionAsync.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
     handleRegister(){
@@ -94,8 +100,12 @@ export default class RegistarUtenteScreen extends React.Component {
         ],
         {cancelable: false},
     );
-}
+  }
 
+  componentDidMount(){
+    this.getPermissionAsync();
+  }
+  /*
   async onPress () {
     var token = await auth.getJWT() // Get token
     var value = this.refs.form.getValue();
@@ -107,24 +117,135 @@ export default class RegistarUtenteScreen extends React.Component {
         .then(res => {this.handleRegister(); this.props.navigation.state.params.getData(); this.props.navigation.navigate('Utentes')})
         .catch(err => {})
     }
+  }
+  */
+  async onPress(){
+    var token = await auth.getJWT() // Get token
+    var value = this.refs.form.getValue();
+    var body = new FormData();
+    if(value != null){
+      var dataNasc = value.dataNascimento;
+      if(this.state.image){
+        body.append('foto',{uri: this.state.image.uri, name:this.state.image.uri.split("/").slice(-1)[0],type:'image/png'})
+      }
+      Object.keys(value).forEach(key => {
+        body.append(key,value[key])
+      })
+      body.append('idUtente',this.state.idUtente)
+      body.append('dataNascimento',dataNasc.toISOString().split("T")[0])
+      axios.post(`http://${conf.host}:${conf.port}/utentes/`,body,
+      {
+        headers: {
+          Authorization: 'Bearer ' + token ,
+          'Content-Type' : 'multipart/form-data',
+          'Accept' : 'multipart/form-data',
+        }
+      })
+        .then(res => {this.handleRegister(); this.props.navigation.state.params.getData(); this.props.navigation.navigate('Utentes')})
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }
 
+
+  getPermissionAsync = async () => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
+    else{
+        const statusCam = await Permissions.askAsync(Permissions.CAMERA).status
+        if(statusCam !== 'granted') {
+            alert('Precisamos da sua permissão para aceder à camera')
+        }
+        const statusRoll = await Permissions.askAsync(Permissions.CAMERA_ROLL).status
+        if(statusRoll !== 'granted') {
+            alert('Precisamos da sua permissão para aceder ao rolo da camera')
+        }
+    }
+  }
+
+  _pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    if (!result.cancelled) {
+      this.setState({ image: result });
+    }
+  };
+
+
+  _takeImage = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    console.log(result.uri.split("/").slice(-1)[0])
+
+    if (!result.cancelled) {
+      this.setState({ image: result });
+    }
+  };
+
+  onChange(value){
+    this.setState({value})
   }
 
   render() {
+    let defaultPhoto = {uri: `http://${conf.host}:${conf.port}/static/images/icon.png`}
+    let newPhoto = this.state.image ? {uri: `${this.state.image.uri}`} : {uri : null}
+
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Form
-            ref="form"
-            type={Utente}
-            options={options}
-            />
+          ref="form"
+          type={Utente}
+          options={options}
+          value={this.state.value}
+          onChange={this.onChange}
+        />
+        <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
+          <Avatar
+            rounded
+            size='large'
+            imageProps={{resizeMode: 'cover'}}
+            containerStyle={{borderRadius: 100, paddingTop:5}}
+            source={!this.state.image ? defaultPhoto : newPhoto}
+          />
+        </View>
+        <View style={{flex:1, padding: 10, flexDirection:'row',justifyContent:'space-around'}}>
+          <Button
+            title="Escolher foto"
+            onPress={this._pickImage}
+            type="outline"
+            icon={<FontAwesome name="edit" size={20} style={{color: '#3990A4'}}/>}
+            buttonStyle={{borderRadius: 70, borderColor: '#3990A4'}}
+            titleStyle={{color:'#3990A4'}}          
+          />
+          <Button
+            title="Tirar foto"
+            onPress={this._takeImage}
+            type="outline"
+            icon={<FontAwesome name="edit" size={20} style={{color: '#3990A4'}}/>}
+            buttonStyle={{borderRadius: 70, borderColor: '#3990A4'}}
+            titleStyle={{color:'#3990A4'}}          
+          />
+        </View>
         <Button onPress={this.onPress} title='Registar' 
                     buttonStyle={styles.buttonStyle}
                     containerStyle={styles.buttonContainer}
                     titleStyle={{color: '#3990A4'}}
                     type="outline"
         />
-      </View>
+      </ScrollView>
     );
   }
 }
