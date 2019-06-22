@@ -13,8 +13,8 @@ var Form = t.form.Form;
 
 var Lembrete = t.struct({
     utente: t.maybe(t.String),              // a required string
-    texto: t.String,  // an optional string
-    data: t.Date,               // a required number
+    texto: t.String,                       // an optional string
+    data: t.maybe(t.Date),               // an optional date
   });
 
   const myFormatFunction = format => date => moment(date).tz("Europe/Lisbon").format(format)
@@ -101,7 +101,7 @@ export default class CriarLembreteScreen extends React.Component {
     if (value != null) {
       console.log(value.data)
         var formData = {
-            timestamp : moment(value.data).format('YYYY-MM-DD HH:mm:ss'),
+            timestamp : value.data ? moment(value.data).format('YYYY-MM-DD HH:mm:ss') : null,
             concluido: 0,
             idFuncionario: decoded.user.idFuncionario,
             texto: value.texto,

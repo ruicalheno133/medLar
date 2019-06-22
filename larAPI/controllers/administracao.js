@@ -27,6 +27,7 @@ module.exports.listar = () => {
                             FROM med_bd.Utente as u
                             INNER JOIN med_bd.FichaMedicacao as fm ON fm.idUtente = u.idUtente 
                             WHERE fm.estado = 1 
+                            AND u.estado = 1
                             AND ((fm.dataFim IS NOT NULL AND now() BETWEEN fm.dataInicio AND fm.dataFim) 
                                 OR (fm.dataFim IS NULL AND now() >= fm.dataInicio))
                             AND fm.dias & 1 != 0 
@@ -49,6 +50,7 @@ module.exports.listarUtentesAMedicar = (altura) => {
                             FROM med_bd.Utente as u
                             INNER JOIN med_bd.FichaMedicacao as fm ON fm.idUtente = u.idUtente 
                             WHERE fm.estado = 1 
+                            AND u.estado = 1
                             AND ((fm.dataFim IS NOT NULL AND now() BETWEEN fm.dataInicio AND fm.dataFim) 
                                 OR (fm.dataFim IS NULL AND now() >= fm.dataInicio))
                             AND fm.dias & 1 != 0 
@@ -77,6 +79,7 @@ module.exports.listarAdministracao = (idUtente, altura) => {
                                 AND a.altura & :altura != 0
                             WHERE u.idUtente = :idUtente
                                 AND fm.estado = 1 
+                                AND u.estado = 1
                                 AND ((fm.dataFim IS NOT NULL AND now() BETWEEN fm.dataInicio AND fm.dataFim) 
                                 OR (fm.dataFim IS NULL AND now() >= fm.dataInicio))
                                 AND fm.dias & 1 != 0 

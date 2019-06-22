@@ -7,7 +7,7 @@ module.exports = (sequelize, type) => {
         },
         timestamp: {
             type: 'DATETIME',
-            allowNull: false
+            allowNull: true
         },
         texto:{
             type: type.STRING(250),

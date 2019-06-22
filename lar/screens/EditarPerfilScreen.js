@@ -90,7 +90,7 @@ export default class EditarFotoScreen extends React.Component {
     this.fecthUtenteData = this.fecthUtenteData.bind(this);
     this._pickImage = this._pickImage.bind(this)
     this.alterarDados = this.alterarDados.bind(this);
-    this.fetchUtenteFoto = this.fetchUtenteFoto.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
   async fecthUtenteData(){
@@ -107,7 +107,7 @@ export default class EditarFotoScreen extends React.Component {
             this.setState({
                 utenteInfo: {...data.data[0]},
                 isLoading: false,
-                formInfo: formInfo
+                value: formInfo
             })
         })
         .catch(erro => {
@@ -115,20 +115,9 @@ export default class EditarFotoScreen extends React.Component {
         })
   }
 
-  async fetchUtenteFoto(){
-    var token = await auth.getJWT();
-    axios.get(`http://${conf.host}:${conf.port}/static/images/icon.png`,{headers: {Authorization: `Bearer ${token}`}})
-        .then(data => {
-
-        })
-        .catch(err => {
-          console.log(err)
-        })
-  }
-
   componentDidMount(){
+    console.log(this.props.navigation.state)
     this.fecthUtenteData();
-    this.fetchUtenteFoto();
     this.getPermissionAsync();
   }
 
@@ -192,7 +181,7 @@ export default class EditarFotoScreen extends React.Component {
       })
       body.append('idUtente',this.state.idUtente)
       body.append('dataNascimento',dataNasc.toISOString().split("T")[0])
-      axios.post(`http://${conf.host}:${conf.port}/utentes/atualizar`,body,
+      axios.put(`http://${conf.host}:${conf.port}/utentes/atualizar`,body,
       {
         headers: {
           Authorization: 'Bearer ' + token ,
@@ -202,12 +191,22 @@ export default class EditarFotoScreen extends React.Component {
       })
         .then(() => {
           Alert.alert('Dados do utente alterados!')
+          this.props.navigation.state.params.getUtenteData(this.state.idUtente);
           this.props.navigation.navigate('PerfilUtente', {idUtente: this.state.idUtente})
         })
         .catch(err => {
           console.log(err)
+          Alert.alert('Dados do utente alterados!')
+          this.props.navigation.state.params.getUtenteData(this.state.idUtente);
+          this.props.navigation.navigate('PerfilUtente', {idUtente: this.state.idUtente})
         })
     }
+  }
+
+  onChange(value){
+    this.setState({
+      value
+    })
   }
 
   render() {
@@ -261,7 +260,8 @@ export default class EditarFotoScreen extends React.Component {
                 <Form
                   ref="form"
                   type={Utente}
-                  value={this.state.formInfo}
+                  onChange={this.onChange}
+                  value={this.state.value}
                   options={options}
                 />
               </View>

@@ -54,7 +54,7 @@ router.post('/', function(req, res) {
 });
 
 /* POST - Atualizar informação de utente específico */
-router.post('/atualizar', function(req, res) {
+router.put('/atualizar', function(req, res) {
   var form = new formidable.IncomingForm()
   form.parse(req,(err,fields,files) => {
     if(files.foto){
@@ -78,7 +78,7 @@ router.post('/atualizar', function(req, res) {
       console.log(utente)
       utenteController.atualizar(utente)
                       .then(() => res.end())
-                      .catch(err => res.status(500).send(erro))
+                      .catch(err => res.status(500).send(err))
     }
   })
 });

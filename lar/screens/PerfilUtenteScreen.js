@@ -54,6 +54,7 @@ export default class PerfilUtenteScreen extends React.Component {
             axios.put(`http://${conf.host}:${conf.port}/utentes/desativar/${this.props.navigation.getParam('idUtente',null)}`, {} ,
             { headers: {Authorization: `Bearer ${token}`}})
                 .then(() => {
+                  this.props.navigation.state.params.getData()
                   this.props.navigation.navigate(('Utentes'))
                 })
                 .catch(err => {
@@ -70,9 +71,9 @@ export default class PerfilUtenteScreen extends React.Component {
     )
   }
 
-  async getUtenteData() {
+  async getUtenteData(idUtente) {
     var token = await auth.getJWT() // Get token
-    axios.get(`http://${conf.host}:${conf.port}/utentes/${this.props.navigation.getParam('idUtente', null)}`,
+    axios.get(`http://${conf.host}:${conf.port}/utentes/${idUtente}`,
     { headers: { Authorization: 'Bearer ' + token }}) // TODO: Change data source
     .then(data => {
       this.setState({
@@ -85,7 +86,7 @@ export default class PerfilUtenteScreen extends React.Component {
   }
 
   componentDidMount() {
-      this.getUtenteData()
+      this.getUtenteData(this.props.navigation.getParam('idUtente',null))
   }
 
 
@@ -168,7 +169,7 @@ export default class PerfilUtenteScreen extends React.Component {
               />
               <Button
                   title="Editar dados"
-                  onPress={()=>this.props.navigation.navigate('EditarPerfil',{idUtente: this.state.utenteInfo.idUtente})}
+                  onPress={()=>this.props.navigation.navigate('EditarPerfil',{idUtente: this.state.utenteInfo.idUtente, getUtenteData: this.getUtenteData})}
                   type="outline"
                   icon={<FontAwesome name="edit" size={20} style={{color: '#3990A4'}}/>}
                   buttonStyle={{borderRadius: 70, borderColor: '#3990A4'}}
@@ -180,7 +181,12 @@ export default class PerfilUtenteScreen extends React.Component {
             <View style={{alignItems:'flex-end', paddingTop:10, marginTop: 10, bottom: 10, right:10, zIndex: 1}}>
               <Button
                   title="Novo medicamento"
-                  onPress={()=>this.props.navigation.navigate('NovoMedicamento',{idUtente: this.state.utenteInfo.idUtente})}
+                  onPress={()=>{
+                    this.props.navigation.navigate('NovoMedicamento',{idUtente: this.state.utenteInfo.idUtente})
+                    this.setState({
+                      selectedIndex:0
+                    })
+                  }}
                   type="outline"
                   icon={<FontAwesome name="edit" size={20} style={{color: '#3990A4'}}/>}
                   buttonStyle={{borderRadius: 70, borderColor: '#3990A4'}}

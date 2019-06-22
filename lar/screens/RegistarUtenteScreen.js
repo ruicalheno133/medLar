@@ -103,6 +103,7 @@ export default class RegistarUtenteScreen extends React.Component {
   }
 
   componentDidMount(){
+    console.log(this.props.navigation.state.params)
     this.getPermissionAsync();
   }
   /*
@@ -141,9 +142,16 @@ export default class RegistarUtenteScreen extends React.Component {
           'Accept' : 'multipart/form-data',
         }
       })
-        .then(res => {this.handleRegister(); this.props.navigation.state.params.getData(); this.props.navigation.navigate('Utentes')})
+        .then(res => {
+          this.handleRegister(); 
+          this.props.navigation.state.params.getData(); 
+          this.props.navigation.navigate('Utentes')
+        })
         .catch(err => {
           console.log(err)
+          this.handleRegister(); 
+          this.props.navigation.state.params.getData(); 
+          this.props.navigation.navigate('Utentes')
         })
     }
   }

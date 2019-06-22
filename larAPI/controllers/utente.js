@@ -34,7 +34,7 @@ module.exports.atualizar = (utente) => {
     else{
         return sequelize.query(`UPDATE med_bd.Utente AS u
                             SET u.nome = :nome, u.nomeUsado = :nomeUsado, 
-                                u.dataNascimento = :dataNascimento , u.contEmergencia = :contEmergencia,
+                                u.dataNascimento = :dataNascimento , u.contEmergencia = :contEmergencia
                             WHERE u.idUtente = :idUtente;`,
         {
             replacements:{

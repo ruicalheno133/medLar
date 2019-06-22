@@ -92,6 +92,7 @@ export default class NovoMedicamentoScreen extends React.Component {
       medicamentos: [],
       utente: {},
       step: 1,
+      idMedicamento: '',
       checkVariables: {
         segunda: false,
         terca: false,
@@ -162,7 +163,7 @@ export default class NovoMedicamentoScreen extends React.Component {
     axios.post(`http://${conf.host}:${conf.port}/fichaMedicacao`,fichaMed,{headers: {Authorization: `Bearer ${token}`}})
       .then(data => {
         Alert.alert('Medicação adicionada')
-        this.props.navigation.navigate('PerfilUtente', {idUtente: this.props.navigation.state.params.idUtente})
+        this.props.navigation.navigate('PerfilUtente', {idUtente: this.state.idUtente})
       })
       .catch(err => console.log(err))
   }
@@ -192,7 +193,7 @@ export default class NovoMedicamentoScreen extends React.Component {
           case 1:
               return (
                 <ScrollView style={styles.container}>
-
+                  <Text style={{color: 'grey', fontWeight:'800',fontSize:16}}>Medicamento*</Text>
                   <Picker
                       selectedValue={this.state.idMedicamento}
                       style={{height: 50, width: '100%', borderColor:'grey', borderWidth:5}}
@@ -220,6 +221,7 @@ export default class NovoMedicamentoScreen extends React.Component {
                     containerStyle={styles.buttonContainer}
                     titleStyle={{color: '#3990A4'}}
                     type="outline"
+                    disabled={this.state.value ? (this.state.idMedicamento==='' ||!this.state.value.quantidade || !this.state.value.unidade || !this.state.value.dataInicio) : (!this.state.value)}
                   />
                 </ScrollView>
               )
@@ -290,6 +292,10 @@ export default class NovoMedicamentoScreen extends React.Component {
                         containerStyle={styles.buttonContainer}
                         titleStyle={{color: '#3990A4'}}
                         type="outline"
+                        disabled={!this.state.checkVariables.segunda && !this.state.checkVariables.terca &&
+                                  !this.state.checkVariables.quarta && !this.state.checkVariables.quinta && 
+                                  !this.state.checkVariables.sexta && !this.state.checkVariables.sabado &&
+                                  !this.state.checkVariables.domingo }
                       />
                     </View>
                   </ScrollView>
@@ -347,6 +353,9 @@ export default class NovoMedicamentoScreen extends React.Component {
                         containerStyle={styles.buttonContainer}
                         titleStyle={{color: '#3990A4'}}
                         type="outline"
+                        disabled={!this.state.checkVariables.almoco && !this.state.checkVariables.pequenoAlmoco &&
+                                  !this.state.checkVariables.lanche && !this.state.checkVariables.jantar && 
+                                  !this.state.checkVariables.ceia}
                     />
                   </View>
                 </ScrollView>

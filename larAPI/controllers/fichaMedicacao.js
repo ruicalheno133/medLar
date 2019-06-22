@@ -12,7 +12,11 @@ module.exports.inserir = (fichaMedicacao) => {
  * Listar todas as fichas de medicação
  */
 module.exports.listar = () => {
-    return FichaMedicacao.findAll();
+    return FichaMedicacao.findAll({
+        where: {
+            estado: 1
+        }
+    });
 };
 
 /**

@@ -16,6 +16,7 @@ var conf = require('../myConfig.json')
 class UtentesList extends React.Component {
 
   render() {
+    console.log(this.props.navigation)
     const list = this.props.utentesList.map((l,i) => (
       <ListItem
       leftAvatar={l.foto ? 
@@ -27,7 +28,7 @@ class UtentesList extends React.Component {
       title={l.nome}
       subtitle={'' + l.idUtente}
       chevron
-      onPress={() => this.props.navigation.navigate('PerfilUtente', {idUtente: l.idUtente})}
+      onPress={() => this.props.navigation.navigate('PerfilUtente', {idUtente: l.idUtente, getData: this.props.navigation.state.params.getData})}
       containerStyle={{borderBottomColor: '#d3d3d3', borderBottomWidth: 1}}
       />
   ))
