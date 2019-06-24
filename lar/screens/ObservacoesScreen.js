@@ -88,7 +88,7 @@ export default class ObservacoesScreen extends React.Component {
     return (
       <View style={styles.container}>
       <View style={{flex:1}}>
-      <TitleSection title={`${medicamento.Medicamento} ${medicamento.quantidade}${medicamento.unidade}`}/>
+      <TitleSection title={`${medicamento.Medicamento}`} subtitle={`${medicamento.quantidade}${medicamento.unidade}`}/>
       </View>
       <View style={{flex:3, padding: 10}}>
       <Text style={{ fontSize: 20, fontWeight: '400' }}>Adicione observações:</Text>

@@ -131,8 +131,8 @@ class MedicamentoList extends React.Component {
                     <ListItem
                     roundAvatar
                     key={m.idFichaMedicacao}
-                    title={m.quantidade + ' ' + m.unidade}
-                    subtitle={m.Medicamento}
+                    title={m.Medicamento}
+                    subtitle={m.quantidade + ' ' + m.unidade}
                     rightElement={
                       <View key={m.idFichaMedicacao} style={{flexDirection: "row"}}>
                         <Button type='clear' onPress={() => this.handleYesPress(m.idAdministracao, m.idMedicamento)} 

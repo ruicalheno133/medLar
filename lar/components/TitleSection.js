@@ -15,6 +15,14 @@ class TitleSection extends React.Component {
             <Text style={styles.title}>
                 {this.props.title}
             </Text>
+            {
+            this.props.subtitle != undefined ?
+            <Text style={styles.title}>
+                {this.props.subtitle}
+            </Text>
+            :
+            null
+            }
         </LinearGradient>
     );
   }

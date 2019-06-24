@@ -31,8 +31,9 @@ db.authenticate()
   .catch(err => {console.log('Unable to connect to Database' + err)})
 
 
-  app.use(passport.initialize())
+app.use(passport.initialize())
 app.use(cors({origin: true}));
+
 
 require('./authentication/auth')
 

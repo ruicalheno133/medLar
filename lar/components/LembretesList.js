@@ -35,7 +35,7 @@ class LembreteList extends React.Component {
 
     async deleteConfirmed(id) {
         var token = await auth.getJWT() // Get token
-        axios.delete(`http://${conf.host}:${conf.port}/lembretes/concluir/${id}`,
+        axios.put(`http://${conf.host}:${conf.port}/lembretes/concluir/${id}`,
                     { headers: { Authorization: 'Bearer ' + token }})
              .then( res => {
                  var newList = this.state.lembretesList.filter(l => l.idLembrete != id)

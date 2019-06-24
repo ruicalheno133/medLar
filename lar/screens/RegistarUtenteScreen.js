@@ -96,7 +96,12 @@ export default class RegistarUtenteScreen extends React.Component {
         'Sucesso',
         'Utente registado com sucesso',
         [,
-            {text: 'OK'},
+            {text: 'OK',
+            onPress: () => {
+              this.props.navigation.state.params.getData(); 
+              this.props.navigation.navigate('Utentes')
+            }
+            },
         ],
         {cancelable: false},
     );
@@ -144,14 +149,10 @@ export default class RegistarUtenteScreen extends React.Component {
       })
         .then(res => {
           this.handleRegister(); 
-          this.props.navigation.state.params.getData(); 
-          this.props.navigation.navigate('Utentes')
         })
         .catch(err => {
           console.log(err)
           this.handleRegister(); 
-          this.props.navigation.state.params.getData(); 
-          this.props.navigation.navigate('Utentes')
         })
     }
   }

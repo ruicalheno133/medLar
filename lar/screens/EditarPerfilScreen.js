@@ -3,7 +3,6 @@ import { ScrollView, StyleSheet, Text, Picker, Alert, View, ActivityIndicator, I
 import { Button, CheckBox, Avatar } from 'react-native-elements';
 import {ImagePicker, Permissions, Constants, LinearGradient} from 'expo';
 import { FontAwesome } from '@expo/vector-icons';
-import {decode as atob,encode as btoa} from 'base-64'
 
 var t = require('tcomb-form-native');
 var _ = require('lodash');

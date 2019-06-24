@@ -8,6 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import FichaMedica from '../components/FichaMedica'
 import EditarFichaMedicacao from '../screens/EditarFichaMedicacaoScreen';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component'; 
+import TitleSection from '../components/TitleSection';
 var conf = require('../myConfig.json')
 var auth = require('../auth')
 
@@ -135,14 +136,10 @@ export default class MedicamentoScreen extends React.Component {
       return (
         <ScrollView style={styles.container}>
           <LinearGradient colors={['#3C6478', '#3990A4']} style={{flex: 2}}>
-            <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-              <Text style={{color:'white', fontSize: 20, fontWeight: '800'}}>
-                {`${this.props.navigation.getParam('medicamento').nome} (${this.props.navigation.getParam('medicamento').forma})`}
-              </Text>
-              <Text style={{color:'white', fontSize: 16, fontWeight: '400'}}>
-                {`${this.props.navigation.getParam('medicamento').quantidade} ${this.props.navigation.getParam('medicamento').unidade}`}
-              </Text>
-            </View>
+            <TitleSection 
+              title={`${this.props.navigation.getParam('medicamento').nome} - ${this.props.navigation.getParam('medicamento').forma}`} 
+              subtitle={`${this.props.navigation.getParam('medicamento').quantidade} ${this.props.navigation.getParam('medicamento').unidade}`} 
+            />
           </LinearGradient>
           <View style={{flex: 6, padding: 10}}>
               <Text style={{fontSize: 15, fontWeight: '600'}}>
