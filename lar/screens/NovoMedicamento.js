@@ -16,7 +16,7 @@ var Unidades = t.enums({
   G: 'g',
 })
 
-var Utente = t.struct({
+var Medicamento = t.struct({
     quantidade: t.Number, 
     unidade: t.String,              // a required string
     dataInicio: t.Date,               // a required number
@@ -141,13 +141,13 @@ export default class NovoMedicamentoScreen extends React.Component {
     if(checked.lanche)    periodosDia += 4;
     if(checked.jantar)    periodosDia += 8;
     if(checked.ceia)      periodosDia += 16;
-    if(checked.segunda)   dias += 1;
-    if(checked.terca)     dias += 2;
-    if(checked.quarta)    dias += 4;
-    if(checked.quinta)    dias += 8;
-    if(checked.sexta)     dias += 16;
-    if(checked.sabado)    dias += 32;
-    if(checked.domingo)   dias += 64;
+    if(checked.domingo)   dias += 1;
+    if(checked.segunda)   dias += 2;
+    if(checked.terca)     dias += 4;
+    if(checked.quarta)    dias += 8;
+    if(checked.quinta)    dias += 16;
+    if(checked.sexta)     dias += 32;
+    if(checked.sabado)    dias += 64;
     var fichaMed = {
       idUtente: this.props.navigation.state.params.idUtente,
       idMedicamento: this.state.idMedicamento,
@@ -210,7 +210,7 @@ export default class NovoMedicamentoScreen extends React.Component {
                   </Picker>
                   <Form
                       ref="form"
-                      type={Utente}
+                      type={Medicamento}
                       options={options}
                       onChange={this.onChange}
                       value={this.state.value}

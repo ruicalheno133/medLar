@@ -70,16 +70,19 @@ module.exports.mudarEstadoFichaMedicacao = (idFichaMedicacao) => {
 }
 
 /**
- * Alterar dias e periodos de uma ficha de medicação
+ * Alterar dias, periodos, data de inicio e data de fim de uma ficha de medicação
  */
-module.exports.editarFichaMedicacao = (idFichaMedicacao, dias, periodosDia) => {
+module.exports.editarFichaMedicacao = (idFichaMedicacao, dias, periodosDia, dataInicio, dataFim) => {
     return sequelize.query(`UPDATE med_bd.FichaMedicacao
-                            SET dias = :dias, periodosDia = :periodosDia
+                            SET dias = :dias, periodosDia = :periodosDia,
+                                dataInicio = :dataInicio, dataFim = :dataFim
                             WHERE idFichaMedicacao = :idFichaMedicacao;`,
     {
         replacements:{
             dias: dias,
             periodosDia: periodosDia,
+            dataInicio: dataInicio,
+            dataFim: dataFim,
             idFichaMedicacao: idFichaMedicacao
         },
         type: sequelize.QueryTypes.UPDATE

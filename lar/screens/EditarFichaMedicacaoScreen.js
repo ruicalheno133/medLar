@@ -1,14 +1,69 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, Picker, Alert, View, ActivityIndicator} from 'react-native';
+import { ScrollView, StyleSheet, Text, Alert, View, ActivityIndicator} from 'react-native';
 import { Button, CheckBox } from 'react-native-elements';
+
+var t = require('tcomb-form-native');
+var _ = require('lodash');
 
 var axios = require('axios')
 import moment from "moment";
 var auth = require('../auth')
 var conf = require('../myConfig.json')
 
+var Form = t.form.Form;
+
+
+var Medicamento = t.struct({
+  dataInicio: t.Date,               // a required number
+  dataFim: t.maybe(t.Date)
+});
 
 const myFormatFunction = format => date => moment(date).format(format)
+const stylesheet = _.cloneDeep(t.form.Form.stylesheet);
+
+// overriding the text color
+stylesheet.textbox.normal.borderWidth = 0;
+stylesheet.textbox.error.borderWidth = 0;
+stylesheet.textbox.normal.marginBottom = 0;
+stylesheet.textbox.error.marginBottom = 0;
+
+stylesheet.textboxView.normal.borderWidth = 0;
+stylesheet.textboxView.error.borderWidth = 0;
+stylesheet.textboxView.normal.borderRadius = 0;
+stylesheet.textboxView.error.borderRadius = 0;
+stylesheet.textboxView.normal.borderBottomWidth = 1;
+stylesheet.textboxView.error.borderBottomWidth = 1;
+stylesheet.textboxView.normal.marginBottom = 5;
+stylesheet.textboxView.error.marginBottom = 5;
+stylesheet.textboxView.normal.borderBottomColor = 'grey';
+stylesheet.controlLabel.normal.color = 'grey';
+
+
+var options = {
+  i18n: {
+    optional: '',
+    required: '*'
+  },
+  fields: {
+  dataInicio: {
+      stylesheet: stylesheet,
+      label: 'Data de Inicio',
+      mode: 'date',
+      error: 'Data de inicio inválida.',
+      config: {
+        format: myFormatFunction("DD/MM/YYYY")
+      },
+  },
+  dataFim: {
+      stylesheet: stylesheet,
+      label: 'Data de Fim',
+      mode: 'date',
+      error: 'Data de fim inválida.',
+      config: {
+        format: myFormatFunction("DD/MM/YYYY")
+      }
+  }
+}};
 
 export default class EditarFichaMedicacaoScreen extends React.Component {
   static navigationOptions = {
@@ -41,22 +96,34 @@ export default class EditarFichaMedicacaoScreen extends React.Component {
 
   componentDidMount(){
     var checkVariables = {};
-    console.log(this.props.navigation.getParam('fichaMedicacao'))
-    var dias = this.props.navigation.getParam('fichaMedicacao').dias;
-    var periodosDia = this.props.navigation.getParam('fichaMedicacao').periodosDia;
-    if((dias & 1) !== 0) checkVariables.segunda = true 
+    var fichaMedicacao = this.props.navigation.getParam('fichaMedicacao');
+    console.log(fichaMedicacao)
+    var dias = fichaMedicacao.dias;
+    var periodosDia = fichaMedicacao.periodosDia;
+    var dataInicio = new Date(fichaMedicacao.dataInicio.split("-")[0],fichaMedicacao.dataInicio.split("-")[1]-1,fichaMedicacao.dataInicio.split("-")[2]);
+    var dataFim = null;
+    if(fichaMedicacao.dataFim){
+      dataFim = new Date(fichaMedicacao.dataFim.split("-")[0],fichaMedicacao.dataFim.split("-")[1]-1,fichaMedicacao.dataFim.split("-")[2]);
+    }
+
+    var value = {
+      dataInicio,
+      dataFim
+    }
+
+    if((dias & 1) !== 0) checkVariables.domingo = true 
       else checkVariables.segunda = false;
-    if((dias & 2) !== 0) checkVariables.terca = true
+    if((dias & 2) !== 0) checkVariables.segunda = true
       else checkVariables.terca = false;
-    if((dias & 4) !== 0) checkVariables.quarta = true 
+    if((dias & 4) !== 0) checkVariables.terca = true 
       else checkVariables.quarta = false;
-    if((dias & 8) !== 0) checkVariables.quinta = true 
+    if((dias & 8) !== 0) checkVariables.quarta = true 
       else checkVariables.quinta = false;
-    if((dias & 16) !== 0) checkVariables.sexta = true
+    if((dias & 16) !== 0) checkVariables.quinta = true
       else checkVariables.sexta = false;
-    if((dias & 32) !== 0) checkVariables.sabado = true
+    if((dias & 32) !== 0) checkVariables.sexta = true
       else checkVariables.sabado = false;
-    if((dias & 64) !== 0) checkVariables.domingo = true
+    if((dias & 64) !== 0) checkVariables.sabado = true
       else checkVariables.domingo = false;
 
     
@@ -76,6 +143,7 @@ export default class EditarFichaMedicacaoScreen extends React.Component {
     this.setState({
       idFichaMedicacao: this.props.navigation.getParam('fichaMedicacao').idFichaMedicacao,
       checkVariables: checkVariables,
+      value: value,
       isLoading: false
     })
   }
@@ -89,18 +157,22 @@ export default class EditarFichaMedicacaoScreen extends React.Component {
     if(checked.lanche)    periodosDia += 4;
     if(checked.jantar)    periodosDia += 8;
     if(checked.ceia)      periodosDia += 16;
-    if(checked.segunda)   dias += 1;
-    if(checked.terca)     dias += 2;
-    if(checked.quarta)    dias += 4;
-    if(checked.quinta)    dias += 8;
-    if(checked.sexta)     dias += 16;
-    if(checked.sabado)    dias += 32;
-    if(checked.domingo)   dias += 64;
+    if(checked.domingo)   dias += 1;
+    if(checked.segunda)   dias += 2;
+    if(checked.terca)     dias += 4;
+    if(checked.quarta)    dias += 8;
+    if(checked.quinta)    dias += 16;
+    if(checked.sexta)     dias += 32;
+    if(checked.sabado)    dias += 64;
+    this.state.value.dataInicio.setHours(this.state.value.dataInicio.getHours() + 2);
+    this.state.value.dataFim.setHours(this.state.value.dataFim.getHours() + 2);
     var fichaMed = {
       periodosDia: periodosDia,
-      //dataFim: this.state.value.dataFim ? this.state.value.dataFim.toString() : null,
+      dataInicio: this.state.value.dataInicio.toISOString().split('T')[0],
+      dataFim: this.state.value.dataFim ? this.state.value.dataFim.toISOString().split('T')[0] : null,
       dias: dias,
     }
+    console.log(fichaMed)
     
     var token = await auth.getJWT() // Get token
     axios.put(`http://${conf.host}:${conf.port}/fichaMedicacao/editar/${this.state.idFichaMedicacao}`,fichaMed,{headers: {Authorization: `Bearer ${token}`}})
@@ -112,6 +184,7 @@ export default class EditarFichaMedicacaoScreen extends React.Component {
   }
 
   onChange(value){
+    console.log(value)
     this.setState({value})
   }
 
@@ -134,6 +207,27 @@ export default class EditarFichaMedicacaoScreen extends React.Component {
       else{
         switch(this.state.step){
           case 1:
+            return(
+              <ScrollView style={styles.container}>
+                <Form
+                  ref="form"
+                  type={Medicamento}
+                  options={options}
+                  onChange={this.onChange}
+                  value={this.state.value}
+                />
+                <View style={styles.buttonContainer}>
+                  <Button onPress={() => {this.setState({step:2})}} 
+                    title='Seguinte' 
+                    buttonStyle={{...styles.buttonStyle, width:'80%'}}
+                    containerStyle={styles.buttonContainer}
+                    titleStyle={{color: '#3990A4'}}
+                    type="outline"
+                  />
+                </View>
+              </ScrollView>
+            )
+          case 2:
             return(
               <ScrollView style={styles.container}>
                 <Text>Dias da semana</Text>
@@ -187,7 +281,14 @@ export default class EditarFichaMedicacaoScreen extends React.Component {
                         onPress={() => this.check('domingo')}
                     />
                     <View style={styles.buttonContainer}>
-                      <Button onPress={() => {this.setState({step:2})}} 
+                      <Button onPress={() => {this.setState({step:1})}} 
+                        title='Voltar' 
+                        buttonStyle={{...styles.buttonStyle, width:'80%'}}
+                        containerStyle={styles.buttonContainer}
+                        titleStyle={{color: '#3990A4'}}
+                        type="outline"
+                      />
+                      <Button onPress={() => {this.setState({step:3})}} 
                         title='Seguinte' 
                         buttonStyle={{...styles.buttonStyle, width:'80%'}}
                         containerStyle={styles.buttonContainer}
@@ -197,7 +298,7 @@ export default class EditarFichaMedicacaoScreen extends React.Component {
                     </View>
                   </ScrollView>
             )
-            case 2:
+            case 3:
               return(
                 <ScrollView style={styles.container}>
                   <Text>Períodos do dia</Text>

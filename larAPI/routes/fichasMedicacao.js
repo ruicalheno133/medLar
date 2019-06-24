@@ -58,7 +58,7 @@ router.put('/mudarEstado/:idFichaMedicacao', (req,res)=>{
 
 /** PUT - Mudar dias e periodo de uma ficha de medicação */
 router.put('/editar/:idFichaMedicacao', (req,res) => {
-  fichaMedicacaoController.editarFichaMedicacao(req.params.idFichaMedicacao, req.body.dias, req.body.periodosDia)
+  fichaMedicacaoController.editarFichaMedicacao(req.params.idFichaMedicacao, req.body.dias, req.body.periodosDia, req.body.dataInicio, req.body.dataFim)
                           .then(dados => {
                             res.jsonp(dados)
                           })

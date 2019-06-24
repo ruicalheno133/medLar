@@ -15,13 +15,13 @@ var dias = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
 
 
 var DiasSemana = [
-  { bit: 1, string:'Segunda-Feira'},
-  { bit: 2, string:'Terça-Feira'},
-  { bit: 4, string:'Quarta-Feira'},
-  { bit: 8, string:'Quinta-Feira'},
-  { bit: 16, string:'Sexta-Feira'},
-  { bit: 32, string:'Sábado'},
-  { bit: 64, string:'Domingo'},
+  { bit: 1, string:'Domingo'},
+  { bit: 2, string:'Segunda-Feira'},
+  { bit: 4, string:'Terça-Feira'},
+  { bit: 8, string:'Quarta-Feira'},
+  { bit: 16, string:'Quinta-Feira'},
+  { bit: 32, string:'Sexta-Feira'},
+  { bit: 64, string:'Sábado'},
   ]
 
 var PeriodosDia = [
@@ -119,7 +119,7 @@ export default class MedicamentoScreen extends React.Component {
 
   componentDidMount(){
       this.fetchFichaMedicacao(() => {
-        this.getMedicamentoTableData();
+        //this.getMedicamentoTableData();
         this.setState({
           isLoading: false
         })
@@ -134,10 +134,13 @@ export default class MedicamentoScreen extends React.Component {
     else{
       return (
         <ScrollView style={styles.container}>
-          <LinearGradient colors={['#3C6478', '#3990A4']} style={{flex: 2}}>
-            <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+          <LinearGradient colors={['#3C6478', '#3990A4']} style={{flex: 4, height:150}}>
+            <View style={{justifyContent: 'center', alignItems: 'center', flex: 3}}>
               <Text style={{color:'white', fontSize: 20, fontWeight: '800'}}>
-                {`${this.props.navigation.getParam('medicamento').nome} (${this.props.navigation.getParam('medicamento').forma})`}
+                {`${this.props.navigation.getParam('medicamento').nome}`}
+              </Text>
+              <Text style={{color:'white', fontSize: 18, fontWeight: '600'}}>
+              {`(${this.props.navigation.getParam('medicamento').forma})`}
               </Text>
               <Text style={{color:'white', fontSize: 16, fontWeight: '400'}}>
                 {`${this.props.navigation.getParam('medicamento').quantidade} ${this.props.navigation.getParam('medicamento').unidade}`}
@@ -151,6 +154,7 @@ export default class MedicamentoScreen extends React.Component {
                   this.props.navigation.getParam('medicamento').unidade
                   }
                   </Text>
+              {/*
               <Table>
               <Row data={['', 'Pequeno Almoço', 'Almoço', 'Lanche', 'Jantar', 'Ceia']} flexArr={[1,1,1,1,1,1]} style={styles.head} textStyle={styles.text}/>
               
@@ -168,6 +172,7 @@ export default class MedicamentoScreen extends React.Component {
               ))
             }
             </Table>
+            */}
 
             <Text style={{fontSize: 15, fontWeight: '600'}}>
                 Data de início:

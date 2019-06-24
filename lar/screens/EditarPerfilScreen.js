@@ -3,7 +3,6 @@ import { ScrollView, StyleSheet, Text, Picker, Alert, View, ActivityIndicator, I
 import { Button, CheckBox, Avatar } from 'react-native-elements';
 import {ImagePicker, Permissions, Constants, LinearGradient} from 'expo';
 import { FontAwesome } from '@expo/vector-icons';
-import {decode as atob,encode as btoa} from 'base-64'
 
 var t = require('tcomb-form-native');
 var _ = require('lodash');
@@ -172,6 +171,7 @@ export default class EditarFotoScreen extends React.Component {
     var body = new FormData();
     var value = this.refs.form.getValue();
     if(value != null){
+      value.dataNascimento.setHours(value.dataNascimento.getHours() + 2 );
       var dataNasc = value.dataNascimento;
       if(this.state.image){
         body.append('foto',{uri: this.state.image.uri, name:this.state.image.uri.split("/").slice(-1)[0],type:'image/png'})
@@ -204,6 +204,7 @@ export default class EditarFotoScreen extends React.Component {
   }
 
   onChange(value){
+    console.log(value)
     this.setState({
       value
     })
