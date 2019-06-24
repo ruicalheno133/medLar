@@ -171,6 +171,7 @@ export default class EditarFotoScreen extends React.Component {
     var body = new FormData();
     var value = this.refs.form.getValue();
     if(value != null){
+      value.dataNascimento.setHours(value.dataNascimento.getHours() + 2 );
       var dataNasc = value.dataNascimento;
       if(this.state.image){
         body.append('foto',{uri: this.state.image.uri, name:this.state.image.uri.split("/").slice(-1)[0],type:'image/png'})
@@ -203,6 +204,7 @@ export default class EditarFotoScreen extends React.Component {
   }
 
   onChange(value){
+    console.log(value)
     this.setState({
       value
     })

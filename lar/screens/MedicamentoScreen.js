@@ -16,13 +16,13 @@ var dias = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
 
 
 var DiasSemana = [
-  { bit: 1, string:'Segunda-Feira'},
-  { bit: 2, string:'Terça-Feira'},
-  { bit: 4, string:'Quarta-Feira'},
-  { bit: 8, string:'Quinta-Feira'},
-  { bit: 16, string:'Sexta-Feira'},
-  { bit: 32, string:'Sábado'},
-  { bit: 64, string:'Domingo'},
+  { bit: 1, string:'Domingo'},
+  { bit: 2, string:'Segunda-Feira'},
+  { bit: 4, string:'Terça-Feira'},
+  { bit: 8, string:'Quarta-Feira'},
+  { bit: 16, string:'Quinta-Feira'},
+  { bit: 32, string:'Sexta-Feira'},
+  { bit: 64, string:'Sábado'},
   ]
 
 var PeriodosDia = [
@@ -120,7 +120,7 @@ export default class MedicamentoScreen extends React.Component {
 
   componentDidMount(){
       this.fetchFichaMedicacao(() => {
-        this.getMedicamentoTableData();
+        //this.getMedicamentoTableData();
         this.setState({
           isLoading: false
         })
@@ -148,6 +148,7 @@ export default class MedicamentoScreen extends React.Component {
                   this.props.navigation.getParam('medicamento').unidade
                   }
                   </Text>
+              {/*
               <Table>
               <Row data={['', 'Pequeno Almoço', 'Almoço', 'Lanche', 'Jantar', 'Ceia']} flexArr={[1,1,1,1,1,1]} style={styles.head} textStyle={styles.text}/>
               
@@ -165,6 +166,7 @@ export default class MedicamentoScreen extends React.Component {
               ))
             }
             </Table>
+            */}
 
             <Text style={{fontSize: 15, fontWeight: '600'}}>
                 Data de início:
