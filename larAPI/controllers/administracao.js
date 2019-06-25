@@ -6,7 +6,7 @@ var sequelize = require('../database/connection')
  * Insert into med_bd.Administracao VALUES (idFuncionario, idUtente, idMedicamento, estado, dataAdministracao, observacao);
  */
 module.exports.inserir = (administracao) => {
-    return sequelize.query(`INSERT INTO administracao VALUES 
+    return sequelize.query(`INSERT INTO med_bd.Administracao VALUES 
                             (null, :idFuncionario, :idUtente, :idMedicamento, :altura, :estado, date(now()), :observacao)`,
             { 
                 replacements: { 
