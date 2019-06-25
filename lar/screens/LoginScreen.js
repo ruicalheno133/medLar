@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text} from 'react-native';
+import { StyleSheet, View, Text, Alert} from 'react-native';
 import { Input, Button} from 'react-native-elements';
 import { LinearGradient } from 'expo';
 import axios from 'axios';
@@ -25,7 +25,8 @@ export default class LoginScreen extends React.Component {
     super(props);
     this.state = {
         email: "",
-        password: ""
+        password: "",
+        error: ""
     };
     this.handleLogin=this.handleLogin.bind(this);
     this.handleRegister=this.handleRegister.bind(this);
@@ -48,7 +49,7 @@ handleRegister(){
       }
       
     }).catch(err => {
-
+      Alert.alert('Erro', 'Credenciais inválidas.')
     })
 
   }
