@@ -26,7 +26,6 @@ class UtentesList extends React.Component {
       }
       key={l.idUtente}
       title={l.nome}
-      subtitle={'' + l.idUtente}
       chevron
       onPress={() => this.props.navigation.navigate('PerfilUtente', {idUtente: l.idUtente, getData: this.props.navigation.state.params.getData})}
       containerStyle={{borderBottomColor: '#d3d3d3', borderBottomWidth: 1}}

@@ -35,6 +35,27 @@ router.post('/', function(req, res) {
     });
   });
 
+  /** POST - Criar novo funcionário */
+router.put('/:idFuncionario', function(req, res) {
+    var newObj = req.body 
+    delete newObj.samePassword
+    if(req.body.password === null) {
+        delete newObj.password
+        funcionarioController.atualizarSpass(req.params.idFuncionario, newObj)
+        .then(() => {res.end()})
+        .catch(erro => res.jsonp(erro))
+    } else { bcrypt.hash(newObj["password"], 10, function(err, hash) {
+        if (!err) {
+            newObj["password"] = hash;
+            
+            funcionarioController.atualizarCpass(req.params.idFuncionario, newObj)
+            .then(() => {res.end()})
+            .catch(erro => res.jsonp(erro))
+        }
+        else res.jsonp(err)
+    })};
+  });
+
 
 
 module.exports = router

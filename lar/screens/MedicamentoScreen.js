@@ -101,6 +101,7 @@ export default class MedicamentoScreen extends React.Component {
             axios.put(`http:${conf.host}:${conf.port}/fichaMedicacao/mudarEstado/${this.props.navigation.getParam('medicamento').idFichaMedicacao}`,{},{headers: {Authorization: `Bearer ${token}`}})
             .then(data => {
               Alert.alert('Medicação removida')
+              this.props.navigation.state.params.getData(); 
               this.props.navigation.navigate('PerfilUtente', {idUtente: this.props.navigation.state.params.idUtente})
 
             })
@@ -142,12 +143,6 @@ export default class MedicamentoScreen extends React.Component {
             />
           </LinearGradient>
           <View style={{flex: 6, padding: 10}}>
-              <Text style={{fontSize: 15, fontWeight: '600'}}>
-                  {this.props.navigation.getParam('medicamento').nome + ' - ' + 
-                  this.props.navigation.getParam('medicamento').quantidade + ' ' + 
-                  this.props.navigation.getParam('medicamento').unidade
-                  }
-                  </Text>
               {/*
               <Table>
               <Row data={['', 'Pequeno Almoço', 'Almoço', 'Lanche', 'Jantar', 'Ceia']} flexArr={[1,1,1,1,1,1]} style={styles.head} textStyle={styles.text}/>
@@ -173,10 +168,10 @@ export default class MedicamentoScreen extends React.Component {
                 <Text style={{fontSize: 15, fontWeight: '100'}}> 
                 { '\t\t' + this.state.fichaMedicacao.dataInicio}
                 </Text>
-              </Text>
+              </Text> 
             {this.state.fichaMedicacao.dataFim ?
               <Text style={{fontSize: 15, fontWeight: '600'}}>
-              Data de final:
+              Data de fim:
                 <Text style={{fontSize: 15, fontWeight: '100'}}> 
                 {'\t\t' + this.state.fichaMedicacao.dataFim}
                 </Text>
@@ -224,7 +219,7 @@ export default class MedicamentoScreen extends React.Component {
                   <Button
                       title="Editar"
                       type="outline"
-                      onPress={() => this.props.navigation.navigate('EditarFichaMedicacao',{fichaMedicacao:this.state.fichaMedicacao,idUtente: this.props.navigation.state.params.idUtente})}
+                      onPress={() => this.props.navigation.navigate('EditarFichaMedicacao',{getData: () => this.props.navigation.state.params.getData(), fichaMedicacao:this.state.fichaMedicacao,idUtente: this.props.navigation.state.params.idUtente})}
                       icon={<FontAwesome name="edit" size={20} style={{color: '#3990A4'}}/>}
                       buttonStyle={{borderRadius: 70, borderColor: '#3990A4'}}
                       titleStyle={{color:'#3990A4'}}

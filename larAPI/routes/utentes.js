@@ -13,7 +13,7 @@ router.delete('/*', passport.authenticate('jwt', {session: false}), (req, res, n
 /* GET - Listar todos os utentes */
 router.get('/', function(req, res, next) {
   utenteController.listar()
-             .then(dados => {res.jsonp(dados)})
+             .then(dados => {console.log(dados); res.jsonp(dados)})
              .catch(erro => res.status(500).send(erro))
 });
 
@@ -35,8 +35,8 @@ router.post('/', function(req, res) {
       mv(files.foto.path,`./public/images/${files.foto.name}`,erro => {
         if(!erro){
           utenteController.inserir(utente)
-                          .then(res.end())
-                          .catch(erro => res.status(500).send(erro))
+                          .then(dados => res.end())
+                          .catch(erro => {console.log(erro);res.status(500).send(erro)})
         }
         else{
           console.log(erro)

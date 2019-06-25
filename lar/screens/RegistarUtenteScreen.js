@@ -14,11 +14,16 @@ var conf = require('../myConfig.json')
 
 var Form = t.form.Form;
 
+const Contacto = t.refinement(t.String, contacto => {
+  const reg = /^[0-9]{9}$/; //or any other regexp
+  return reg.test(contacto);
+});
+
 var Utente = t.struct({
     nome: t.String,              // a required string
     nomeUsado: t.maybe(t.String),  // an optional string
     dataNascimento: t.Date,               // a required number
-    contEmergencia: t.String
+    contEmergencia: Contacto
   });
 
   const myFormatFunction = format => date => moment(date).format(format)
@@ -90,7 +95,7 @@ export default class RegistarUtenteScreen extends React.Component {
     this.onChange = this.onChange.bind(this);
   }
 
-    handleRegister(){
+    handleRegister(res){
         // Works on both iOS and Android
         Alert.alert(
         'Sucesso',
@@ -98,8 +103,8 @@ export default class RegistarUtenteScreen extends React.Component {
         [,
             {text: 'OK',
             onPress: () => {
-              this.props.navigation.state.params.getData(); 
               this.props.navigation.navigate('Utentes')
+              setTimeout(() => this.props.navigation.state.params.getData() , 1000 )
             }
             },
         ],
@@ -108,7 +113,6 @@ export default class RegistarUtenteScreen extends React.Component {
   }
 
   componentDidMount(){
-    console.log(this.props.navigation.state.params)
     this.getPermissionAsync();
   }
   /*
@@ -151,7 +155,6 @@ export default class RegistarUtenteScreen extends React.Component {
           this.handleRegister(); 
         })
         .catch(err => {
-          console.log(err)
           this.handleRegister(); 
         })
     }

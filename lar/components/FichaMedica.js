@@ -72,7 +72,7 @@ class FichaMedica extends React.Component {
                     title={`${m.nome} - ${m.forma}`}
                     subtitle={`${m.quantidade} ${m.unidade}`}
                     chevron
-                    onPress={() => this.props.navigation.navigate('Medicamento', {utente: this.props.utenteInfo, medicamento: m})}
+                    onPress={() => this.props.navigation.navigate('Medicamento', {getData: () => this.getData(), utente: this.props.utenteInfo, medicamento: m})}
                     containerStyle={{borderBottomColor: '#d3d3d3', borderBottomWidth: 1}}
                     />
                 ))

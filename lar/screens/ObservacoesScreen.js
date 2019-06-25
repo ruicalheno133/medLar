@@ -95,14 +95,17 @@ export default class ObservacoesScreen extends React.Component {
         <View style={{margin: 5, borderBottomWidth: 1, borderBottomColor:'#d3d3d3'}}>
         <Picker
             selectedValue={this.state.pickerValue}
-            tyle={{height: 50, width: '100%', borderColor:'grey', borderWidth:5}}
+            style={{height: 50, width: '100%', borderColor:'grey', borderWidth:5}}
             onValueChange={(itemValue, itemIndex) => {
               this.setState({pickerValue: itemValue})
             }}
+            itemStyle={{borderColor:'grey', borderWidth:5}}
         >
             <Picker.Item label="Causa" value="def" />
             <Picker.Item label="Recusou" value="Recusou." />
-            <Picker.Item label="Estava em jejum" value="Estava em jejum." />
+            <Picker.Item label="Em jejum" value="Estava em jejum." />
+            <Picker.Item label="Ausente" value="Ausente." />
+            <Picker.Item label="Não apto" value="Não apto." />
             <Picker.Item label="Outro" value="Outro" />
         </Picker>
         </View>

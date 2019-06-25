@@ -15,12 +15,14 @@ import MedicamentoScreen from '../screens/MedicamentoScreen';
 import NovoMedicamentoScreen from '../screens/NovoMedicamento';
 import EditarFichaMedicacaoScreen from '../screens/EditarFichaMedicacaoScreen';
 import EditarPerfilScreen from '../screens/EditarPerfilScreen';
+import EditarPerfilFuncionarioScreen from '../screens/EditarPerfilFuncionarioScreen';
 
 const TarefasStack = createStackNavigator({
     Tarefas   : PeriodosDiaScreen,
     TarefasDia   : TarefasDiaScreen,
     Administrar : AdministrarScreen,
     Observacoes : ObservacoesScreen, 
+    EditarPerfilFuncionario: EditarPerfilFuncionarioScreen
 });
 
 TarefasStack.navigationOptions = 

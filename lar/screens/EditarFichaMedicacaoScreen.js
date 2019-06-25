@@ -178,6 +178,7 @@ export default class EditarFichaMedicacaoScreen extends React.Component {
     axios.put(`http://${conf.host}:${conf.port}/fichaMedicacao/editar/${this.state.idFichaMedicacao}`,fichaMed,{headers: {Authorization: `Bearer ${token}`}})
       .then(data => {
         Alert.alert('Ficha de medicação editada com sucesso!')
+        this.props.navigation.state.params.getData(); 
         this.props.navigation.navigate('PerfilUtente', {idUtente: this.props.navigation.state.params.idUtente})
       })
       .catch(err => console.log(err))

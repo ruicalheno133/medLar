@@ -13,11 +13,16 @@ var conf = require('../myConfig.json')
 
 var Form = t.form.Form;
 
+const Contacto = t.refinement(t.String, contacto => {
+  const reg = /^[0-9]{9}$/; //or any other regexp
+  return reg.test(contacto);
+});
+
 var Utente = t.struct({
     nome: t.String,              // a required string
     nomeUsado: t.maybe(t.String),  // an optional string
     dataNascimento: t.Date,               // a required number
-    contEmergencia: t.String
+    contEmergencia: Contacto
   });
 
   const myFormatFunction = format => date => moment(date).format(format)
@@ -115,7 +120,6 @@ export default class EditarFotoScreen extends React.Component {
   }
 
   componentDidMount(){
-    console.log(this.props.navigation.state)
     this.fecthUtenteData();
     this.getPermissionAsync();
   }
@@ -190,15 +194,37 @@ export default class EditarFotoScreen extends React.Component {
         }
       })
         .then(() => {
-          Alert.alert('Dados do utente alterados!')
-          this.props.navigation.state.params.getUtenteData(this.state.idUtente);
-          this.props.navigation.navigate('PerfilUtente', {idUtente: this.state.idUtente})
+          Alert.alert(
+            'Sucesso',
+            'Dados do utente alterados!',
+            [,
+                {text: 'OK',
+                onPress: () => {
+                  this.props.navigation.state.params.getUtentesData();
+                  this.props.navigation.state.params.getUtenteData(this.state.idUtente);
+                  this.props.navigation.navigate('PerfilUtente', {idUtente: this.state.idUtente})
+                }
+                },
+            ],
+            {cancelable: false},
+        );
         })
         .catch(err => {
           console.log(err)
-          Alert.alert('Dados do utente alterados!')
-          this.props.navigation.state.params.getUtenteData(this.state.idUtente);
-          this.props.navigation.navigate('PerfilUtente', {idUtente: this.state.idUtente})
+          Alert.alert(
+            'Sucesso',
+            'Dados do utente alterados!',
+            [,
+                {text: 'OK',
+                onPress: () => {
+                  this.props.navigation.state.params.getUtentesData();
+                  this.props.navigation.state.params.getUtenteData(this.state.idUtente);
+                  this.props.navigation.navigate('PerfilUtente', {idUtente: this.state.idUtente})
+                }
+                },
+            ],
+            {cancelable: false},
+        );
         })
     }
   }

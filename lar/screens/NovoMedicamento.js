@@ -71,12 +71,12 @@ stylesheet.controlLabel.normal.color = 'grey';
     unidade: {
         stylesheet: stylesheet,
         label: 'Unidade',
-        error: 'Unidade errada.'
+        error: 'Unidade inválida.'
     },
     quantidade: {
         stylesheet: stylesheet,
         label: 'Quantidade',
-        error: 'Quantidade errada.'
+        error: 'Quantidade inválida.'
     }
   }};
 

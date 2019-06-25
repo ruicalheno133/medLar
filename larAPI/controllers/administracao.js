@@ -46,6 +46,8 @@ module.exports.listar = () => {
  * Lista utentes a medicar no dia atual
  */
 module.exports.listarUtentesAMedicar = (altura) => {
+    var now = new Date();
+    var dia = Math.pow(2, now.getDay())
     return sequelize.query(`SELECT DISTINCT u.*
                             FROM med_bd.Utente as u
                             INNER JOIN med_bd.FichaMedicacao as fm ON fm.idUtente = u.idUtente 
@@ -53,11 +55,12 @@ module.exports.listarUtentesAMedicar = (altura) => {
                             AND u.estado = 1
                             AND ((fm.dataFim IS NOT NULL AND now() BETWEEN fm.dataInicio AND fm.dataFim) 
                                 OR (fm.dataFim IS NULL AND now() >= fm.dataInicio))
-                            AND fm.dias & 1 != 0 
+                            AND fm.dias & :dia != 0 
                             AND fm.periodosDia & :altura != 0;`,
             { 
                 replacements: { 
-                    altura: altura 
+                    altura: altura,
+                    dia: dia
                 }, 
                 type: sequelize.QueryTypes.SELECT 
             }
@@ -69,6 +72,8 @@ module.exports.listarUtentesAMedicar = (altura) => {
  * para determinada altura do dia atual
  */
 module.exports.listarAdministracao = (idUtente, altura) => {
+    var now = new Date();
+    var dia = Math.pow(2, now.getDay())
     return sequelize.query(`SELECT m.idMedicamento, CONCAT(m.nome, ' - ', m.forma) as 'Medicamento' , fm.idFichaMedicacao ,fm.quantidade, fm.unidade, a.estado, a.idAdministracao
                             FROM med_bd.Utente as u
                             INNER JOIN med_bd.FichaMedicacao as fm ON fm.idUtente = u.idUtente 
@@ -82,12 +87,13 @@ module.exports.listarAdministracao = (idUtente, altura) => {
                                 AND u.estado = 1
                                 AND ((fm.dataFim IS NOT NULL AND now() BETWEEN fm.dataInicio AND fm.dataFim) 
                                 OR (fm.dataFim IS NULL AND now() >= fm.dataInicio))
-                                AND fm.dias & 1 != 0 
+                                AND fm.dias & :dia != 0 
                                 AND fm.periodosDia & :altura != 0;`,
         { 
             replacements: { 
                 altura: altura, 
-                idUtente: idUtente 
+                idUtente: idUtente,
+                dia: dia
             }, 
             type: sequelize.QueryTypes.SELECT 
         }

@@ -169,7 +169,7 @@ export default class PerfilUtenteScreen extends React.Component {
               />
               <Button
                   title="Editar dados"
-                  onPress={()=>this.props.navigation.navigate('EditarPerfil',{idUtente: this.state.utenteInfo.idUtente, getUtenteData: this.getUtenteData})}
+                  onPress={()=>this.props.navigation.navigate('EditarPerfil',{getUtentesData: () => this.props.navigation.state.params.getData(), idUtente: this.state.utenteInfo.idUtente, getUtenteData: this.getUtenteData})}
                   type="outline"
                   icon={<FontAwesome name="edit" size={20} style={{color: '#3990A4'}}/>}
                   buttonStyle={{borderRadius: 70, borderColor: '#3990A4'}}
