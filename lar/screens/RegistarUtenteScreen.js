@@ -80,7 +80,7 @@ stylesheet.controlLabel.normal.color = 'grey';
 
 export default class RegistarUtenteScreen extends React.Component {
   static navigationOptions = {
-    title: 'Registar Utente',
+    title: 'Adicionar Utente',
   };
 
   constructor(props) {
@@ -251,7 +251,7 @@ export default class RegistarUtenteScreen extends React.Component {
             titleStyle={{color:'#3990A4'}}          
           />
         </View>
-        <Button onPress={this.onPress} title='Registar' 
+        <Button onPress={this.onPress} title='Adicionar' 
                     buttonStyle={styles.buttonStyle}
                     containerStyle={styles.buttonContainer}
                     titleStyle={{color: '#3990A4'}}
