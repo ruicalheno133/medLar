@@ -169,7 +169,7 @@ Alert.alert(
             options={options}
             value={this.state.value}
             />
-        <Button onPress={this.onPress} title='Registar' 
+        <Button onPress={this.onPress} title='Concluir' 
                     buttonStyle={styles.buttonStyle}
                     containerStyle={styles.buttonContainer}
                     titleStyle={{color: '#3990A4'}}

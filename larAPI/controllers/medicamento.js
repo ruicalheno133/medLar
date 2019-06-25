@@ -14,7 +14,8 @@ module.exports.inserir = (medicamento) => {
  */
 module.exports.listar = () => {
     return sequelize.query(`SELECT med.idMedicamento,  CONCAT (med.nome, " - ", med.forma) as 'Medicamento'
-                            FROM med_bd.Medicamento AS med;`,
+                            FROM med_bd.Medicamento AS med
+                            ORDER BY med.nome ASC;`,
     {
         type: sequelize.QueryTypes.SELECT
     })
