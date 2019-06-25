@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Teste",
-    "slug": "teste",
+    "name": "Lar",
+    "slug": "lar",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -10,9 +10,9 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/medlar.png",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/medlar.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

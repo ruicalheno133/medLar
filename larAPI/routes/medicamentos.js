@@ -5,9 +5,10 @@ var passport = require('passport')
 
 /* Autenticação */
 router.get('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
-router.post('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
 
-/* GET - Listar todos os medicamentos */
+/* 
+    GET - Listar todos os medicamentos 
+*/
 router.get('/', (req,res) => {
     medicamentoController.listar()
         .then(data => {

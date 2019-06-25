@@ -43,7 +43,7 @@ class MedicamentoList extends React.Component {
     var token = await auth.getJWT() // Get token
     var altura = ALTURAS[this.props.navigation.getParam('altura')]
     
-    axios.get(`http://${conf.host}:${conf.port}/administracao/porDoente/${this.props.navigation.getParam('idUtente')}/${altura}`,
+    axios.get(`http://${conf.host}:${conf.port}/administracao/porUtente/${this.props.navigation.getParam('idUtente')}/${altura}`,
               { headers: { Authorization: 'Bearer ' + token }})
       .then((data)=> {
         this.setState({
@@ -56,7 +56,6 @@ class MedicamentoList extends React.Component {
   }
 
   handleNoPress(m) {
-    console.log(m)
     this.props.navigation.navigate('Observacoes', {medicamento: m, 
                                                    altura: this.props.navigation.getParam('altura'),
                                                    idUtente: this.props.navigation.getParam('idUtente'),
@@ -71,14 +70,12 @@ class MedicamentoList extends React.Component {
     }
     catch (e) {console.log(e)}
     if (idAdministracao !== null) {
-      console.log('update')
-      axios.put(`http://${conf.host}:${conf.port}/administracao/atualizarAdministracao/${idAdministracao}`, {estado: 1},
+      axios.put(`http://${conf.host}:${conf.port}/administracao/${idAdministracao}`, {estado: 1},
       { headers: { Authorization: 'Bearer ' + token }})
           .then(response => {
             this.getData()
         })
     } else {
-      console.log('create')
       var obj = {
         'idUtente': this.props.navigation.getParam('idUtente'),
         'idMedicamento': idMedicamento,
@@ -87,7 +84,7 @@ class MedicamentoList extends React.Component {
         'estado': 1,
         'observacao': null
       }
-      axios.post(`http://${conf.host}:${conf.port}/administracao/registarAdministracao`, obj,
+      axios.post(`http://${conf.host}:${conf.port}/administracao`, obj,
                   { headers: { Authorization: 'Bearer ' + token }})
            .then(response => {this.getData()})
            .catch(err => {console.log(err)})

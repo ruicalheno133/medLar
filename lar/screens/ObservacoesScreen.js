@@ -39,8 +39,7 @@ export default class ObservacoesScreen extends React.Component {
     }
     catch (e) {console.log(e)}
     if (m.idAdministracao !== null) {
-      console.log('update')
-      axios.put(`http://${conf.host}:${conf.port}/administracao/atualizarAdministracao/${m.idAdministracao}`, {observacao: observacao, estado: 0},
+      axios.put(`http://${conf.host}:${conf.port}/administracao/${m.idAdministracao}`, {observacao: observacao, estado: 0},
       { headers: { Authorization: 'Bearer ' + token }})
           .then(response => {
             this.props.navigation.getParam('getData')(); 
@@ -48,8 +47,6 @@ export default class ObservacoesScreen extends React.Component {
         })
           .catch(err => {console.log(err)})
     } else {
-      console.log('create')
-      console.log(this.props.navigation.getParam('idUtente'))
       var obj = {
         'idUtente': this.props.navigation.getParam('idUtente'),
         'idMedicamento': m.idMedicamento,
@@ -58,8 +55,7 @@ export default class ObservacoesScreen extends React.Component {
         'estado': 0,
         'observacao': observacao
       }
-      console.log(obj)
-      axios.post(`http://${conf.host}:${conf.port}/administracao/registarAdministracao`, obj,
+      axios.post(`http://${conf.host}:${conf.port}/administracao`, obj,
       { headers: { Authorization: 'Bearer ' + token }})
           .then(response => {
             this.props.navigation.getParam('getData')(); 

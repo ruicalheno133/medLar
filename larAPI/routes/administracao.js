@@ -9,48 +9,53 @@ router.post('/*', passport.authenticate('jwt', {session: false}), (req, res, nex
 router.delete('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
 
 /* 
- *  Rotas relacionadas com as tarefas de administração 
- */
-router.get('/', function(req, res, next) {
-  res.send('Rotas da administração');
-});
-
-/* GET - Listar todos os Utentes a administrar em determinada altura do dia. */
-router.get('/porAltura/:altura', function(req, res, next) {
-  console.log(req.headers)
+  GET - Listar todas as administrações em determinada altura do dia. 
+*/
+router.get('/porAltura/:altura', function(req, res) {
   administracaoController.listarUtentesAMedicar(req.params.altura)
                          .then(data => {res.jsonp(data)})
-                         .catch(err => {console.log(err)})
+                         .catch(err => {
+                                    console.log(err)
+                                    res.status(500).send(err)
+                                })
 });
 
-/* GET - Listar todos os medicamentos a administrar e respetivas quantidades e informações de conclusão, por Utente e Altura do dia*/
-router.get('/porDoente/:utente/:altura', function(req, res, next) {
+/* 
+  GET - Listar todas as administrações, por Utente e Altura do dia
+*/
+router.get('/porUtente/:utente/:altura', function(req, res) {
   administracaoController.listarAdministracao(req.params.utente, req.params.altura)
                          .then(data => {res.jsonp(data)})
-                         .catch(err => {console.log(err)})
+                         .catch(err => {
+                                  console.log(err)
+                                  res.status(500).send(err)
+                                })
 });
 
-/* POST - Criar nova administração */
-router.post('/registarAdministracao',(req,res) => {
-  console.log(req.body)
+/* 
+  POST - Criar nova administração 
+*/
+router.post('/',(req,res) => {
   administracaoController.inserir(req.body)
       .then(data => {
           res.jsonp(data)
       })
-      .catch(erro => {
-        console.log(erro)
-          res.status(500).send(erro)
+      .catch(err => {
+          console.log(err)
+          res.status(500).send(err)
       })
 });
 
-/* PUT - Atualizar administração específica */
-router.put('/atualizarAdministracao/:idAdministracao',(req,res) => {
-  administracaoController.atualizar(req.params.idAdministracao, req.body)
+/* 
+  PUT - Atualizar administração específica 
+*/
+router.put('/:id',(req,res) => {
+  administracaoController.atualizar(req.params.id, req.body)
       .then(data => {
           res.jsonp(data)
       })
       .catch(erro => {
-        console.log(erro)
+          console.log(erro)
           res.status(500).send(erro)
       })
 });

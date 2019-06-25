@@ -9,7 +9,9 @@ router.get('/*', passport.authenticate('jwt', {session: false}), (req, res, next
 router.post('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
 router.delete('/*', passport.authenticate('jwt', {session: false}), (req, res, next) => {next()})
 
-/** GET - Listar informação de funcionário específico */
+/* 
+    GET - Listar informação de funcionário específico 
+*/
 router.get('/:id', (req, res) => {
     funcionarioController.listarID(req.params.id)
         .then(data => {
@@ -20,7 +22,9 @@ router.get('/:id', (req, res) => {
         })
 });
 
-/** POST - Criar novo funcionário */
+/*
+    POST - Criar novo funcionário 
+*/
 router.post('/', function(req, res) {
     var newObj = {...req.body , ...{idFuncionario: null}}
     bcrypt.hash(newObj["password"], 10, function(err, hash) {
@@ -35,20 +39,22 @@ router.post('/', function(req, res) {
     });
   });
 
-  /** POST - Criar novo funcionário */
-router.put('/:idFuncionario', function(req, res) {
+/*
+    POST - Criar novo funcionário 
+*/
+router.put('/:id', function(req, res) {
     var newObj = req.body 
     delete newObj.samePassword
     if(req.body.password === null) {
         delete newObj.password
-        funcionarioController.atualizarSpass(req.params.idFuncionario, newObj)
+        funcionarioController.atualizarSpass(req.params.id, newObj)
         .then(() => {res.end()})
         .catch(erro => res.jsonp(erro))
     } else { bcrypt.hash(newObj["password"], 10, function(err, hash) {
         if (!err) {
             newObj["password"] = hash;
             
-            funcionarioController.atualizarCpass(req.params.idFuncionario, newObj)
+            funcionarioController.atualizarCpass(req.params.id, newObj)
             .then(() => {res.end()})
             .catch(erro => res.jsonp(erro))
         }

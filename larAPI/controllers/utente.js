@@ -54,7 +54,8 @@ module.exports.atualizar = (utente) => {
  */
 module.exports.listar = () => {
     return sequelize.query(`SELECT u.* FROM med_bd.Utente AS u
-                            WHERE u.estado = 1`,
+                            WHERE u.estado = 1
+                            ORDER BY u.nome`,
     {
         type: sequelize.QueryTypes.SELECT
     })
