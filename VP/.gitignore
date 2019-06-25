@@ -1,8 +1,0 @@
-.vpprefdata/
-*.vpp~*
-*.vpp.working
-*.vpp.working-journal
-*.vpp.bak_*
-*.lock
-tmp/*
-imagens/
